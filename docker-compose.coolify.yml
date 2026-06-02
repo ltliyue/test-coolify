@@ -58,8 +58,8 @@ services:
       dockerfile: Dockerfile
     image: receptiviq-frontend:${IMAGE_TAG:-latest}
     restart: unless-stopped
-    expose:
-      - "80"
+    ports:
+      - "${FRONTEND_PORT:-8081}:80"
     depends_on:
       - backend
 

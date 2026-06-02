@@ -1,0 +1,57 @@
+flowchart TB
+    subgraph USERS["Users"]
+        STAFF["Agency Ops Staff"]
+        CLIENT["Brand Owner (Client)"]
+        AGENCY_ADMIN["Agency Admin"]
+    end
+
+    subgraph PLATFORM["ReceptivIQ Platform"]
+        CORE["Multi-Tenant SaaS<br/>GDPR + CCPA + HIPAA"]
+    end
+
+    subgraph LLM_PROV["LLM Providers"]
+        OPENROUTER["OpenRouter<br/>Gateway"]
+        BEDROCK["AWS Bedrock<br/>HIPAA bypass (planned)"]
+    end
+
+    subgraph DATA_SRC["Data Sources (9 platforms)"]
+        ADS["Ad Platforms<br/>Meta · DV360 · StackAdapt · TikTok"]
+        ANALYTICS["Analytics<br/>GA4"]
+        CRM["CRM<br/>HubSpot"]
+        ATTR["Attribution / Identity<br/>LeadRX · LiveRamp"]
+        PR["Public Affairs<br/>Quorum"]
+    end
+
+    subgraph OPS_TOOLS["Ops Tooling"]
+        LANGFUSE["Langfuse<br/>LLM tracing"]
+        SENTRY["Sentry<br/>error monitoring"]
+        SMTP_EXT["SMTP<br/>email delivery"]
+    end
+
+    STAFF -.->|Ops Console| CORE
+    AGENCY_ADMIN -.->|Tenant config| CORE
+    CLIENT -.->|White-label Portal| CORE
+
+    CORE -->|text generation| OPENROUTER
+    CORE -.->|HIPAA tenants| BEDROCK
+    CORE -->|OAuth / API pull| ADS
+    CORE -->|OAuth| ANALYTICS
+    CORE -->|OAuth| CRM
+    CORE -->|API Key| ATTR
+    CORE -->|API Key| PR
+
+    CORE -.->|LLM trace| LANGFUSE
+    CORE -.->|exceptions| SENTRY
+    CORE -->|report delivery| SMTP_EXT
+
+    classDef users fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef platform fill:#fef3c7,stroke:#d97706,color:#78350f
+    classDef llm fill:#fce7f3,stroke:#db2777,color:#831843
+    classDef datasrc fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef ops fill:#f3e8ff,stroke:#9333ea,color:#581c87
+
+    class STAFF,CLIENT,AGENCY_ADMIN users
+    class CORE platform
+    class OPENROUTER,BEDROCK llm
+    class ADS,ANALYTICS,CRM,ATTR,PR datasrc
+    class LANGFUSE,SENTRY,SMTP_EXT ops

@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="980" viewBox="0 0 1600 980">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#315b7c"/>
+    </marker>
+    <style>
+      .title{font:700 28px Arial,sans-serif;fill:#152238}
+      .section{font:700 16px Arial,sans-serif;fill:#17324d}
+      .label{font:600 13px Arial,sans-serif;fill:#1f2d3d}
+      .small{font:500 12px Arial,sans-serif;fill:#44546a}
+      .box{fill:#fff;stroke:#9bb3c8;stroke-width:1.4;rx:8}
+      .group{fill:#f7fbff;stroke:#b8cce0;stroke-width:1.5;rx:10}
+      .secure{fill:#fff8ee;stroke:#e1b16a;stroke-width:1.6;rx:10}
+      .ai{fill:#f5f2ff;stroke:#a99ce3;stroke-width:1.5;rx:10}
+      .app{fill:#f2fbf7;stroke:#8cc7a4;stroke-width:1.5;rx:10}
+      .line{stroke:#315b7c;stroke-width:2;fill:none;marker-end:url(#arrow)}
+      .dash{stroke:#8a6d3b;stroke-width:2;fill:none;stroke-dasharray:6 5;marker-end:url(#arrow)}
+    </style>
+  </defs>
+
+  <rect width="1600" height="980" fill="#ffffff"/>
+  <text x="40" y="48" class="title">ReceptivIQ High-Level Data Flow</text>
+  <text x="40" y="74" class="small">External sources flow through secure ingestion, PII segregation, ELT, Snowflake, Core AI Brain, pillar agents, and the portal layer.</text>
+
+  <rect x="36" y="110" width="220" height="790" class="group"/>
+  <text x="58" y="140" class="section">External Data Sources</text>
+  <g>
+    <rect x="58" y="165" width="176" height="42" class="box"/><text x="146" y="191" text-anchor="middle" class="label">Experian</text>
+    <rect x="58" y="216" width="176" height="42" class="box"/><text x="146" y="242" text-anchor="middle" class="label">TransUnion</text>
+    <rect x="58" y="267" width="176" height="42" class="box"/><text x="146" y="293" text-anchor="middle" class="label">Nielsen</text>
+    <rect x="58" y="318" width="176" height="42" class="box"/><text x="146" y="344" text-anchor="middle" class="label">Placer IQ</text>
+    <rect x="58" y="369" width="176" height="42" class="box"/><text x="146" y="395" text-anchor="middle" class="label">Quorum</text>
+    <rect x="58" y="420" width="176" height="42" class="box"/><text x="146" y="446" text-anchor="middle" class="label">DV360</text>
+    <rect x="58" y="471" width="176" height="42" class="box"/><text x="146" y="497" text-anchor="middle" class="label">Meta</text>
+    <rect x="58" y="522" width="176" height="42" class="box"/><text x="146" y="548" text-anchor="middle" class="label">TikTok</text>
+    <rect x="58" y="573" width="176" height="42" class="box"/><text x="146" y="599" text-anchor="middle" class="label">The Trade Desk</text>
+    <rect x="58" y="624" width="176" height="42" class="box"/><text x="146" y="650" text-anchor="middle" class="label">GA4</text>
+    <rect x="58" y="675" width="176" height="42" class="box"/><text x="146" y="701" text-anchor="middle" class="label">Tresorit</text>
+  </g>
+
+  <rect x="300" y="150" width="210" height="420" class="group"/>
+  <text x="322" y="180" class="section">Secure Ingestion</text>
+  <rect x="330" y="210" width="150" height="54" class="box"/>
+  <text x="405" y="232" text-anchor="middle" class="label">Credential</text>
+  <text x="405" y="249" text-anchor="middle" class="label">Vault</text>
+  <rect x="330" y="290" width="150" height="54" class="box"/>
+  <text x="405" y="312" text-anchor="middle" class="label">API</text>
+  <text x="405" y="329" text-anchor="middle" class="label">Extractors</text>
+  <rect x="330" y="370" width="150" height="54" class="box"/>
+  <text x="405" y="392" text-anchor="middle" class="label">Encrypted</text>
+  <text x="405" y="409" text-anchor="middle" class="label">File Intake</text>
+  <rect x="330" y="450" width="150" height="68" class="box"/>
+  <text x="405" y="475" text-anchor="middle" class="label">Data</text>
+  <text x="405" y="492" text-anchor="middle" class="label">Classification</text>
+
+  <rect x="550" y="150" width="230" height="260" class="secure"/>
+  <text x="572" y="180" class="section">Compliance Boundary</text>
+  <rect x="580" y="215" width="170" height="66" class="box"/>
+  <text x="665" y="240" text-anchor="middle" class="label">Raw PII</text>
+  <text x="665" y="257" text-anchor="middle" class="label">Segregated Lake</text>
+  <rect x="580" y="315" width="170" height="58" class="box"/>
+  <text x="665" y="339" text-anchor="middle" class="label">Tokenization</text>
+  <text x="665" y="356" text-anchor="middle" class="label">Hashing</text>
+
+  <rect x="550" y="470" width="230" height="330" class="group"/>
+  <text x="572" y="500" class="section">ELT Pipeline</text>
+  <rect x="580" y="525" width="170" height="32" class="box"/><text x="665" y="546" text-anchor="middle" class="label">Load to Staging</text>
+  <rect x="580" y="566" width="170" height="32" class="box"/><text x="665" y="587" text-anchor="middle" class="label">Transform</text>
+  <rect x="580" y="607" width="170" height="32" class="box"/><text x="665" y="628" text-anchor="middle" class="label">Normalize</text>
+  <rect x="580" y="648" width="170" height="32" class="box"/><text x="665" y="669" text-anchor="middle" class="label">Deduplicate</text>
+  <rect x="580" y="689" width="170" height="32" class="box"/><text x="665" y="710" text-anchor="middle" class="label">Validate</text>
+  <rect x="580" y="730" width="170" height="32" class="box"/><text x="665" y="751" text-anchor="middle" class="label">Enrich + Index</text>
+  <rect x="590" y="770" width="150" height="24" fill="#fff1f0" stroke="#d67b76" rx="6"/>
+  <text x="665" y="787" text-anchor="middle" class="small">Quarantine on fail</text>
+
+  <rect x="825" y="210" width="250" height="470" class="group"/>
+  <text x="847" y="240" class="section">Snowflake Warehouse</text>
+  <rect x="860" y="270" width="180" height="54" class="box"/>
+  <text x="950" y="292" text-anchor="middle" class="label">Processed Lake</text>
+  <text x="950" y="309" text-anchor="middle" class="small">Non-PII canonical data</text>
+  <rect x="860" y="345" width="180" height="54" class="box"/><text x="950" y="367" text-anchor="middle" class="label">Row-Level</text><text x="950" y="384" text-anchor="middle" class="label">Security</text>
+  <rect x="860" y="420" width="180" height="54" class="box"/><text x="950" y="451" text-anchor="middle" class="label">Semantic Layer</text>
+  <rect x="860" y="495" width="180" height="54" class="box"/><text x="950" y="517" text-anchor="middle" class="label">AI Retrieval</text><text x="950" y="534" text-anchor="middle" class="label">Index</text>
+  <rect x="860" y="570" width="180" height="54" class="box"/><text x="950" y="592" text-anchor="middle" class="label">Zero-Copy</text><text x="950" y="609" text-anchor="middle" class="label">Clones</text>
+
+  <rect x="1120" y="210" width="210" height="315" class="ai"/>
+  <text x="1142" y="240" class="section">Core AI Brain</text>
+  <rect x="1150" y="270" width="150" height="46" class="box"/><text x="1225" y="298" text-anchor="middle" class="label">Context Builder</text>
+  <rect x="1150" y="335" width="150" height="46" class="box"/><text x="1225" y="363" text-anchor="middle" class="label">LLM Router</text>
+  <rect x="1150" y="400" width="150" height="46" class="box"/><text x="1225" y="428" text-anchor="middle" class="label">Orchestrator</text>
+  <rect x="1150" y="465" width="150" height="38" class="box"/><text x="1225" y="489" text-anchor="middle" class="small">Audit + Budget</text>
+
+  <rect x="1370" y="160" width="190" height="285" class="ai"/>
+  <text x="1392" y="190" class="section">Pillar Agents</text>
+  <rect x="1400" y="215" width="130" height="38" class="box"/><text x="1465" y="239" text-anchor="middle" class="label">Persona</text>
+  <rect x="1400" y="265" width="130" height="38" class="box"/><text x="1465" y="289" text-anchor="middle" class="label">Creative</text>
+  <rect x="1400" y="315" width="130" height="38" class="box"/><text x="1465" y="339" text-anchor="middle" class="label">Attribution</text>
+  <rect x="1400" y="365" width="130" height="38" class="box"/><text x="1465" y="389" text-anchor="middle" class="label">Media</text>
+
+  <rect x="1115" y="620" width="445" height="240" class="app"/>
+  <text x="1137" y="650" class="section">Application and Portal Layer</text>
+  <rect x="1145" y="680" width="155" height="42" class="box"/><text x="1223" y="706" text-anchor="middle" class="label">Market Research</text>
+  <rect x="1325" y="680" width="155" height="42" class="box"/><text x="1403" y="706" text-anchor="middle" class="label">Creative Engine</text>
+  <rect x="1145" y="735" width="155" height="42" class="box"/><text x="1223" y="761" text-anchor="middle" class="label">Media Buying</text>
+  <rect x="1325" y="735" width="155" height="42" class="box"/><text x="1403" y="761" text-anchor="middle" class="label">Attribution</text>
+  <rect x="1145" y="790" width="155" height="42" class="box"/><text x="1223" y="816" text-anchor="middle" class="label">Agency Portal</text>
+  <rect x="1325" y="790" width="155" height="42" class="box"/><text x="1403" y="816" text-anchor="middle" class="label">Client Portal</text>
+
+  <path class="line" d="M234 440 C270 440,285 318,330 318"/>
+  <path class="line" d="M234 696 C278 696,285 398,330 398"/>
+  <path class="line" d="M405 264 L405 290"/>
+  <path class="line" d="M480 318 C520 318,522 484,330 484"/>
+  <path class="line" d="M480 398 C515 398,520 484,480 484"/>
+  <path class="dash" d="M480 484 C525 484,535 248,580 248"/>
+  <path class="line" d="M750 344 C790 344,805 544,580 544"/>
+  <path class="line" d="M480 484 C525 484,535 544,580 544"/>
+  <path class="line" d="M665 563 L665 574"/>
+  <path class="line" d="M665 612 L665 623"/>
+  <path class="line" d="M665 661 L665 672"/>
+  <path class="line" d="M665 710 L665 721"/>
+  <path class="line" d="M750 740 C800 740,810 297,860 297"/>
+  <path class="line" d="M950 324 L950 345"/>
+  <path class="line" d="M950 399 L950 420"/>
+  <path class="line" d="M950 474 L950 495"/>
+  <path class="line" d="M1040 447 C1085 447,1100 293,1150 293"/>
+  <path class="line" d="M1300 423 C1330 423,1350 309,1400 309"/>
+  <path class="line" d="M1465 403 C1465 500,1280 635,1223 680"/>
+  <path class="line" d="M1465 253 C1465 540,1280 635,1223 680"/>
+  <path class="line" d="M1465 303 C1465 570,1400 650,1403 680"/>
+  <path class="line" d="M1465 353 C1465 610,1410 700,1403 735"/>
+</svg>

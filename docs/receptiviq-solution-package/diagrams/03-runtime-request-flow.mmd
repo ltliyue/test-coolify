@@ -1,0 +1,22 @@
+sequenceDiagram
+    participant User as Agency / Client User
+    participant App as ReceptivIQ Portal
+    participant Auth as Auth + RBAC
+    participant Brain as Core AI Brain
+    participant Snow as Snowflake
+    participant Agent as Pillar Agent
+    participant Audit as Audit Log
+
+    User->>App: Request insight, report, persona, creative, or media recommendation
+    App->>Auth: Validate user, tenant, role, and client scope
+    Auth-->>App: Authorized context
+    App->>Brain: Submit task with tenant context
+    Brain->>Audit: Record request metadata
+    Brain->>Snow: Query semantic layer with tenant policies
+    Snow-->>Brain: RLS-filtered processed data
+    Brain->>Agent: Invoke pillar agent
+    Agent-->>Brain: Structured output, confidence, citations
+    Brain->>Audit: Record model, tokens, data access, output metadata
+    Brain-->>App: Return insight or recommendation
+    App-->>User: Display in portal
+

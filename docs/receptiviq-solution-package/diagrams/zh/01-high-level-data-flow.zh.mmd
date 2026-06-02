@@ -1,0 +1,96 @@
+flowchart LR
+    subgraph EXT["外部数据源"]
+        EXP["Experian"]
+        TU["TransUnion"]
+        NLS["Nielsen"]
+        PLC["Placer IQ"]
+        QRM["Quorum"]
+        DV["DV360"]
+        META["Meta"]
+        TT["TikTok"]
+        TTD["The Trade Desk"]
+        GA4["GA4"]
+        TR["Tresorit"]
+    end
+
+    subgraph ING["安全摄取层"]
+        AUTH["凭证保险库"]
+        FILE["加密文件接入"]
+        API["API 抽取器"]
+        CLASS["数据分类"]
+    end
+
+    subgraph COMP["合规边界"]
+        RAWPII["PII 原始隔离湖"]
+        TOKEN["Token / Hash"]
+    end
+
+    subgraph ELT["ELT 管道"]
+        LOAD["加载到 Staging"]
+        NORM["仓库内转换与标准化"]
+        DEDUP["去重"]
+        VALID["校验"]
+        ENRICH["富集"]
+        INDEX["索引"]
+        QUAR["隔离队列"]
+    end
+
+    subgraph WH["Snowflake 数据仓库"]
+        RAWNON["Processed Lake"]
+        RLS["行级安全 RLS"]
+        SEM["语义层"]
+        VEC["AI 检索索引"]
+        CLONE["Zero-Copy Clone"]
+    end
+
+    subgraph AI["Core AI Brain"]
+        ROUTER["LLM 路由"]
+        CTX["上下文构建"]
+        ORCH["Agent 编排"]
+        AUDIT["AI 审计 + 预算"]
+    end
+
+    subgraph AGENTS["Pillar Agents"]
+        PA["Persona Agent"]
+        CA["Creative Agent"]
+        AA["Attribution Agent"]
+        MA["Media Agent"]
+    end
+
+    subgraph APP["应用与门户层"]
+        MR["市场研究"]
+        CE["创意引擎"]
+        MB["媒体投放"]
+        AT["归因分析"]
+        CP["客户门户"]
+        AP["代理商门户"]
+    end
+
+    EXT --> API
+    TR --> FILE
+    AUTH --> API
+    API --> CLASS
+    FILE --> CLASS
+    CLASS -->|PII / PHI| RAWPII
+    RAWPII --> TOKEN
+    TOKEN --> LOAD
+    CLASS -->|非 PII| LOAD
+    LOAD --> NORM --> DEDUP --> VALID
+    VALID -->|通过| ENRICH --> INDEX --> RAWNON
+    VALID -->|失败| QUAR
+    RAWNON --> RLS --> SEM --> VEC --> CTX
+    RLS --> CLONE
+    SEM --> CTX --> ROUTER --> ORCH
+    AUDIT --- ROUTER
+    AUDIT --- ORCH
+    ORCH --> PA --> MR
+    ORCH --> CA --> CE
+    ORCH --> AA --> AT
+    ORCH --> MA --> MB
+    MR --> AP
+    CE --> AP
+    MB --> AP
+    AT --> AP
+    AT --> CP
+    MR --> CP
+

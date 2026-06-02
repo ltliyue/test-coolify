@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="1240" viewBox="0 0 1120 1240">
+  <defs>
+    <marker id="d" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#315b7c"/></marker>
+    <style>
+      .title{font:700 26px Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#152238}
+      .layerTitle{font:700 17px Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#17324d}
+      .label{font:600 13px Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#24364a}
+      .small{font:500 12px Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#4b5d72}
+      .layer{fill:#f7fbff;stroke:#9bb3c8;stroke-width:1.5;rx:10}
+      .pii{fill:#fff4f2;stroke:#d9857c;stroke-width:1.6;rx:10}
+      .brain{fill:#f5f2ff;stroke:#a99ce3;stroke-width:1.5;rx:10}
+      .pillars{fill:#f2fbf7;stroke:#8cc7a4;stroke-width:1.5;rx:10}
+      .line{stroke:#315b7c;stroke-width:2.2;fill:none;marker-end:url(#d)}
+      .dash{stroke:#b16050;stroke-width:2;fill:none;stroke-dasharray:6 5;marker-end:url(#d)}
+    </style>
+  </defs>
+  <rect width="1120" height="1240" fill="#fff"/>
+  <text x="50" y="50" class="title">ReceptivIQ 平台架构 Schema</text>
+  <text x="50" y="76" class="small">从数据源层到 ELT、Snowflake、Core AI Brain、Agents、功能柱和门户层的完整架构。</text>
+
+  <rect x="95" y="115" width="930" height="95" class="layer"/>
+  <text x="125" y="148" class="layerTitle">1. 数据源层</text>
+  <text x="125" y="176" class="small">Experian、TransUnion、Nielsen、Placer IQ、Quorum、DV360、Meta、TikTok、The Trade Desk、GA4、Tresorit</text>
+
+  <rect x="95" y="250" width="930" height="95" class="layer"/>
+  <text x="125" y="283" class="layerTitle">2. 摄取与凭证层</text>
+  <text x="125" y="311" class="small">OAuth、API Key、Service Account、加密文件接入、租户级凭证保险库、连接器框架</text>
+
+  <rect x="95" y="385" width="930" height="95" class="pii"/>
+  <text x="125" y="418" class="layerTitle">3. 合规与分类层</text>
+  <text x="125" y="446" class="small">PII/PHI 扫描、数据分类、数据驻留策略、保留策略、审计</text>
+
+  <rect x="95" y="530" width="440" height="125" class="pii"/>
+  <text x="125" y="563" class="layerTitle">4A. PII 原始隔离湖</text>
+  <text x="125" y="591" class="small">加密原始敏感数据、租户级密钥、受限身份映射表、DSAR 删除流程</text>
+
+  <rect x="585" y="530" width="440" height="125" class="layer"/>
+  <text x="615" y="563" class="layerTitle">4B. ELT 管道</text>
+  <text x="615" y="591" class="small">Extract、Classify、Load，然后在 Snowflake 内 Transform、Normalize、Deduplicate、Validate、Enrich、Index</text>
+
+  <rect x="95" y="705" width="930" height="105" class="layer"/>
+  <text x="125" y="738" class="layerTitle">5. Snowflake 数据仓库</text>
+  <text x="125" y="766" class="small">Processed Lake、Canonical Schema、Row-Level Security、Zero-Copy Cloning、Semantic Layer、AI Retrieval Index</text>
+
+  <rect x="95" y="855" width="930" height="105" class="brain"/>
+  <text x="125" y="888" class="layerTitle">6. Core AI Brain</text>
+  <text x="125" y="916" class="small">LLM 路由、上下文构建、Agent 编排、工具执行、Token 预算、Prompt 与访问审计</text>
+
+  <rect x="95" y="1005" width="930" height="80" class="brain"/>
+  <text x="125" y="1038" class="layerTitle">7. Agent 层</text>
+  <text x="300" y="1038" class="label">Persona Agent</text>
+  <text x="470" y="1038" class="label">Creative Agent</text>
+  <text x="640" y="1038" class="label">Attribution Agent</text>
+  <text x="830" y="1038" class="label">Media Agent</text>
+
+  <rect x="95" y="1130" width="440" height="58" class="pillars"/>
+  <text x="120" y="1164" class="label">8. MVP 功能柱：市场研究、创意引擎、媒体投放、归因分析、客户门户</text>
+  <rect x="585" y="1130" width="440" height="58" class="pillars"/>
+  <text x="610" y="1164" class="label">9. 应用层：代理商门户、客户门户、Admin Console、报表导出</text>
+
+  <path class="line" d="M560 210 L560 250"/>
+  <path class="line" d="M560 345 L560 385"/>
+  <path class="dash" d="M430 480 C390 505,350 505,315 530"/>
+  <path class="line" d="M700 480 C740 505,785 505,805 530"/>
+  <path class="dash" d="M535 592 C555 592,565 592,585 592"/>
+  <path class="line" d="M805 655 C805 680,560 680,560 705"/>
+  <path class="line" d="M560 810 L560 855"/>
+  <path class="line" d="M560 960 L560 1005"/>
+  <path class="line" d="M560 1085 L315 1130"/>
+  <path class="line" d="M560 1085 L805 1130"/>
+</svg>
+

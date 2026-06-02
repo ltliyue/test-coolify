@@ -1,0 +1,115 @@
+# Render Blueprint — ReceptivIQ Platform
+# Docs: https://render.com/docs/blueprint-spec
+#
+# Usage:
+#   1. In Render Dashboard select "Blueprint" → connect this repository
+#   2. Create the database in Neon Console and grab the connection string
+#   3. Configure environment variables in Render Environment Groups
+#   4. Deploy
+
+services:
+  # ── Backend API ────────────────────────────────────────────
+  - type: web
+    name: receptiviq-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    region: oregon
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      # Neon PostgreSQL (production DB)
+      - key: DATABASE_URL
+        sync: false # manually set Neon connection string in Render Dashboard
+      - key: SYNC_DATABASE_URL
+        sync: false # psycopg2-form connection string
+      # Security
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        sync: false # Fernet key, must be generated manually
+      # AI
+      - key: OPENROUTER_API_KEY
+        sync: false
+      # Observability
+      - key: SENTRY_DSN
+        sync: false
+      - key: LANGFUSE_PUBLIC_KEY
+        sync: false
+      - key: LANGFUSE_SECRET_KEY
+        sync: false
+      - key: LANGFUSE_HOST
+        value: https://cloud.langfuse.com
+      # Warehouse (Snowflake in prod, DuckDB in dev)
+      - key: WAREHOUSE_BACKEND
+        value: duckdb
+      # Google OAuth
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+
+  # ── Frontend (static site)─────────────────────────────────────
+  - type: web
+    name: receptiviq-web
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: receptiviq-api
+          property: host
+      - key: VITE_GOOGLE_CLIENT_ID
+        sync: false
+
+  # ── Celery Worker (background tasks)────────────────────────────────
+  - type: worker
+    name: receptiviq-worker
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SYNC_DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        fromService:
+          type: web
+          name: receptiviq-api
+          envVarKey: SECRET_KEY
+      - key: ENCRYPTION_KEY
+        sync: false
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: receptiviq-redis
+          property: connectionString
+      - key: CELERY_BROKER_URL
+        fromService:
+          type: redis
+          name: receptiviq-redis
+          property: connectionString
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: WAREHOUSE_BACKEND
+        value: duckdb
+    startCommand: celery -A app.worker worker --loglevel=info --concurrency=2
+
+  # ── Redis ─────────────────────────────────────────────────
+  - type: redis
+    name: receptiviq-redis
+    plan: starter
+    maxmemoryPolicy: allkeys-lru

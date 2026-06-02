@@ -1,0 +1,158 @@
+flowchart TB
+    %% ───────── 1. Third-Party Data Sources ─────────
+    subgraph SOURCES["Third-Party Data Sources (9 platforms)"]
+        direction LR
+        GA4["GA4<br/>OAuth 2.0"]
+        META["Meta Ads<br/>OAuth 2.0"]
+        HS["HubSpot<br/>OAuth 2.0"]
+        TT["TikTok Ads<br/>OAuth 2.0"]
+        DV["DV360<br/>API Key"]
+        SA["StackAdapt<br/>API Key"]
+        LDX["LeadRX<br/>API Key"]
+        LR["LiveRamp<br/>API Key<br/>(Identity Graph<br/>+ Segment Match Rates)"]
+        QR["Quorum<br/>API Key"]
+    end
+
+    %% ───────── 2. Extraction Layer ─────────
+    subgraph EXTRACT["Extraction Layer (Python)"]
+        AIRFLOW["Apache Airflow 2.9.1<br/>(DAG scheduler · :8080)"]
+        ADAPTERS["ETL Adapters<br/>backend/app/services/etl/adapters/<br/>9 × BaseAdapter subclasses"]
+        VAULT["Credential Vault<br/>(Fernet encrypted)"]
+        AIRFLOW -->|trigger DAG| ADAPTERS
+        ADAPTERS -->|decrypt token| VAULT
+    end
+
+    %% ───────── 3. Compliance Gate (forced, no bypass) ─────────
+    subgraph COMPLIANCE["Compliance Gate (UNCONDITIONAL)"]
+        PHI["PHI Detector<br/>HIPAA Safe Harbor (18 types)"]
+        ANON["Anonymizer<br/>SHA-256 + tenant salt<br/>IPv4 → /24 · IPv6 → /48"]
+        FM["Field Mapping<br/>(per-tenant transform rules)"]
+        PHI --> ANON --> FM
+    end
+
+    %% ───────── 4. Cloud Data Warehouse ─────────
+    subgraph WAREHOUSE["Cloud Warehouse — Snowflake (prod) / DuckDB (dev)"]
+        RAW["RAW Layer (Load target)<br/>raw_ga4_events · raw_meta_ads<br/>raw_hubspot_contacts · raw_dv360<br/>raw_stackadapt · raw_leadrx<br/>raw_liveramp · raw_quorum"]
+
+        subgraph DBT["dbt — In-Warehouse Transform (the T in ELT)"]
+            direction TB
+            STG["Staging Layer<br/>8 views · per-platform normalization<br/>stg_ga4 / stg_meta_ads / ..."]
+            CANON["Canonical Layer<br/>canonical_events<br/>incremental + cross-source dedup<br/>(GA4 + Meta + HubSpot today)"]
+            MART["Marts Layer<br/>mart_campaign_unified (F-19)<br/>mart_attribution (F-12)<br/>mart_persona_signals (F-10)<br/>mart_campaign_performance"]
+            STG --> CANON --> MART
+        end
+
+        RAW --> STG
+    end
+
+    %% ───────── 5. Application Tier ─────────
+    subgraph APP["Application Tier — FastAPI :8000"]
+        WHCLIENT["WarehouseClient<br/>SQL-injection guards:<br/>_ALLOWED_TABLES · _COL_PATTERN"]
+        BRAIN["AI Brain + 3 Agents<br/>Persona · Creative · Attribution"]
+        ROUTERS["21 REST Routers + 1 WS<br/>(/api/v1/* + /ws)"]
+        CELERY["Celery Workers<br/>reports · budget alerts · ETL tasks"]
+        ALEMBIC["Alembic<br/>(schema migrations)"]
+    end
+
+    %% ───────── 6. Operational Database ─────────
+    subgraph OPDB["Operational DB — PostgreSQL 15 + pgvector"]
+        TABLES["19 ORM tables<br/>· agencies + clients (2-tier tenancy)<br/>· users (PII Fernet-encrypted)<br/>· personas + creatives + attribution<br/>· token_usage + audit_logs<br/>· credentials (Fernet encrypted)<br/>· field_mapping (versioned)<br/>· reports + notifications"]
+    end
+
+    %% ───────── 6.5 Audience Activation (F-21) — Outbound flow ─────────
+    subgraph ACTIVATION["Audience Activation (F-21 outbound)"]
+        AE_SVC["AudienceExportService<br/>backend/app/services/audience_export/<br/>· translator.py (persona → spec)<br/>· meta_client.py · dv360_client.py"]
+        LR_HUB["LiveRamp Identity Hub<br/>· RampID resolution<br/>· cross-device matching<br/>· (planned middleware)"]
+        META_AUD["Meta Custom Audience<br/>graph.facebook.com/v19.0"]
+        DV360_AUD["DV360 First-Party Audience<br/>displayvideo.googleapis.com/v3"]
+    end
+
+    %% ───────── 7. Client Tier ─────────
+    subgraph CLIENT["Client Tier — React 19 + Vite"]
+        OPS_C["Ops Console<br/>(agency staff)"]
+        PORTAL_C["White-label Portal<br/>(brand clients)"]
+    end
+
+    %% ───────── 8. Third-Party SaaS Services ─────────
+    subgraph SAAS["Third-Party SaaS"]
+        OR["OpenRouter<br/>LLM gateway<br/>(Claude · Gemini)"]
+        BEDROCK["AWS Bedrock<br/>HIPAA bypass (planned)"]
+        LANGFUSE["Langfuse<br/>LLM call tracing"]
+        SENTRY["Sentry<br/>error monitoring"]
+        SMTP_SVC["SMTP<br/>email delivery"]
+        S3["AWS S3 / MinIO<br/>object storage<br/>(PDF reports · brand assets)"]
+        NEON["Neon<br/>managed PostgreSQL (prod)"]
+    end
+
+    %% ───────── 9. DevOps & Source Control ─────────
+    subgraph DEVOPS["DevOps & Source Control"]
+        GITHUB["GitHub<br/>source · PR · CI"]
+        DOCKER["Docker Compose<br/>local dev stack (9 services)"]
+        RENDER["Render<br/>production hosting<br/>(render.yaml)"]
+    end
+
+    %% ═════════════ Data-flow edges ═════════════
+    SOURCES -->|HTTPS pull| ADAPTERS
+    ADAPTERS -->|raw records| PHI
+    FM -->|cleansed records| RAW
+
+    MART -->|SELECT analytical| WHCLIENT
+    WHCLIENT --> ROUTERS
+    BRAIN -->|persona / creative / attribution outputs| TABLES
+    ROUTERS <-->|CRUD| TABLES
+    CELERY <-->|read/write state| TABLES
+    ALEMBIC -->|migrate schema| TABLES
+
+    %% ═════════════ External integrations ═════════════
+    BRAIN -->|chat completions| OR
+    BRAIN -.->|HIPAA tenants future| BEDROCK
+    BRAIN -.->|prompt/response trace| LANGFUSE
+    APP -.->|exceptions| SENTRY
+    CELERY -->|report PDF upload| S3
+    CELERY -->|email reports| SMTP_SVC
+    TABLES -.->|prod backend| NEON
+
+    %% ═════════════ Audience Activation (F-21) ═════════════
+    TABLES -->|persona definition| AE_SVC
+    AE_SVC -->|current: direct push| META_AUD
+    AE_SVC -->|current: direct push| DV360_AUD
+    AE_SVC -.->|planned: identity resolution| LR_HUB
+    LR_HUB -.->|planned: RampID-keyed| META_AUD
+    LR_HUB -.->|planned: RampID-keyed| DV360_AUD
+
+    %% ═════════════ Client-Application ═════════════
+    OPS_C <-->|REST + WSS| ROUTERS
+    PORTAL_C <-->|REST + WSS| ROUTERS
+
+    %% ═════════════ DevOps wires ═════════════
+    GITHUB -->|git push triggers deploy| RENDER
+    GITHUB -->|clone for local dev| DOCKER
+    RENDER -.->|hosts| APP
+    RENDER -.->|hosts| CLIENT
+    DOCKER -.->|runs locally| APP
+    DOCKER -.->|runs locally| CLIENT
+
+    %% ═════════════ Styling ═════════════
+    classDef src fill:#dcfce7,stroke:#16a34a,color:#14532d
+    classDef extract fill:#fef9c3,stroke:#ca8a04,color:#713f12
+    classDef comply fill:#fee2e2,stroke:#dc2626,stroke-width:3px,color:#7f1d1d
+    classDef wh fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+    classDef dbt fill:#fce7f3,stroke:#db2777,color:#831843
+    classDef app fill:#fef3c7,stroke:#d97706,color:#78350f
+    classDef db fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+    classDef client fill:#e0e7ff,stroke:#4f46e5,color:#312e81
+    classDef saas fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+    classDef devops fill:#e5e7eb,stroke:#4b5563,color:#1f2937
+
+    class GA4,META,HS,TT,DV,SA,LDX,LR,QR src
+    class AIRFLOW,ADAPTERS,VAULT extract
+    class PHI,ANON,FM comply
+    class RAW wh
+    class STG,CANON,MART dbt
+    class WHCLIENT,BRAIN,ROUTERS,CELERY,ALEMBIC app
+    class TABLES db
+    class OPS_C,PORTAL_C client
+    class OR,BEDROCK,LANGFUSE,SENTRY,SMTP_SVC,S3,NEON saas
+    class GITHUB,DOCKER,RENDER devops
+    class AE_SVC,META_AUD,DV360_AUD app
+    class LR_HUB saas

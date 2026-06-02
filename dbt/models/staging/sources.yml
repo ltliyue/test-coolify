@@ -1,0 +1,59 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "Raw ingestion tables from ETL pipeline"
+    tables:
+      - name: raw_ga4_events
+        description: "Raw GA4 event data"
+        columns:
+          - name: agency_id
+            tests: [not_null]
+          - name: date
+            tests: [not_null]
+          - name: property_id
+            tests: [not_null]
+      - name: raw_meta_ads
+        description: "Raw Meta Ads data"
+        columns:
+          - name: agency_id
+            tests: [not_null]
+          - name: date
+            tests: [not_null]
+      - name: raw_hubspot_contacts
+        description: "Raw HubSpot contact data"
+      - name: raw_quorum
+        description: "Raw Quorum audience/behavioral data"
+        columns:
+          - name: agency_id
+            tests: [not_null]
+          - name: date
+            tests: [not_null]
+      - name: raw_leadrx
+        description: "Raw LeadRX attribution data"
+        columns:
+          - name: agency_id
+            tests: [not_null]
+          - name: date
+            tests: [not_null]
+      - name: raw_liveramp
+        description: "Raw LiveRamp identity resolution data"
+        columns:
+          - name: agency_id
+            tests: [not_null]
+          - name: date
+            tests: [not_null]
+      - name: raw_dv360
+        description: "Raw DV360 programmatic campaign data"
+        columns:
+          - name: agency_id
+            tests: [not_null]
+          - name: date
+            tests: [not_null]
+      - name: raw_stackadapt
+        description: "Raw StackAdapt native/programmatic ad data"
+        columns:
+          - name: agency_id
+            tests: [not_null]
+          - name: date
+            tests: [not_null]

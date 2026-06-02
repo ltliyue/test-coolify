@@ -1,0 +1,44 @@
+flowchart TB
+    subgraph SOURCE["来源输入"]
+        CRM["CRM 导出 / 客户名单"]
+        ADS["广告平台报表"]
+        GA["GA4 事件"]
+        DATA["受众数据供应商"]
+    end
+
+    subgraph CLASSIFY["分类关口"]
+        SCAN["PII / PHI 扫描"]
+        POLICY["租户数据策略"]
+    end
+
+    subgraph PII["PII 原始隔离湖"]
+        ENC["加密对象存储"]
+        MAP["身份映射表"]
+        DSR["DSAR / 删除流程"]
+    end
+
+    subgraph PROC["Snowflake Processed Lake"]
+        HASH["哈希标识符"]
+        AGG["聚合指标"]
+        CANON["统一营销 Schema"]
+        RLS2["行访问策略"]
+    end
+
+    subgraph AI2["AI 使用边界"]
+        SAFECTX["安全上下文构建"]
+        PROMPT["Prompt 载荷：无原始 PII"]
+        LOG["Prompt 与访问审计"]
+    end
+
+    CRM --> SCAN
+    ADS --> SCAN
+    GA --> SCAN
+    DATA --> SCAN
+    POLICY --> SCAN
+    SCAN -->|PII / PHI| ENC
+    ENC --> MAP --> DSR
+    MAP --> HASH
+    SCAN -->|非 PII| CANON
+    HASH --> CANON --> AGG --> RLS2
+    RLS2 --> SAFECTX --> PROMPT --> LOG
+

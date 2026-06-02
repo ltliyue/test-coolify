@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1380" height="740" viewBox="0 0 1380 740">
+  <defs>
+    <marker id="arrow3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#34495e"/>
+    </marker>
+    <style>
+      .title{font:700 26px Arial,sans-serif;fill:#152238}
+      .head{font:700 13px Arial,sans-serif;fill:#1f2d3d}
+      .msg{font:500 12px Arial,sans-serif;fill:#25364a}
+      .note{font:500 12px Arial,sans-serif;fill:#607086}
+      .box{fill:#f7fbff;stroke:#9bb3c8;stroke-width:1.4;rx:8}
+      .life{stroke:#b7c4d3;stroke-width:1.4;stroke-dasharray:5 6}
+      .line{stroke:#34495e;stroke-width:2;fill:none;marker-end:url(#arrow3)}
+      .return{stroke:#5e7c62;stroke-width:2;fill:none;stroke-dasharray:6 5;marker-end:url(#arrow3)}
+    </style>
+  </defs>
+  <rect width="1380" height="740" fill="#fff"/>
+  <text x="42" y="48" class="title">Runtime Request Flow</text>
+  <text x="42" y="74" class="note">Portal request path through Auth/RBAC, Core AI Brain, Snowflake, pillar agent execution, and audit logging.</text>
+
+  <g>
+    <rect x="45" y="110" width="135" height="46" class="box"/><text x="112" y="139" text-anchor="middle" class="head">User</text>
+    <rect x="230" y="110" width="135" height="46" class="box"/><text x="297" y="139" text-anchor="middle" class="head">Portal</text>
+    <rect x="415" y="110" width="135" height="46" class="box"/><text x="482" y="139" text-anchor="middle" class="head">Auth + RBAC</text>
+    <rect x="600" y="110" width="135" height="46" class="box"/><text x="667" y="139" text-anchor="middle" class="head">Core AI Brain</text>
+    <rect x="785" y="110" width="135" height="46" class="box"/><text x="852" y="139" text-anchor="middle" class="head">Snowflake</text>
+    <rect x="970" y="110" width="135" height="46" class="box"/><text x="1037" y="139" text-anchor="middle" class="head">Pillar Agent</text>
+    <rect x="1155" y="110" width="135" height="46" class="box"/><text x="1222" y="139" text-anchor="middle" class="head">Audit Log</text>
+  </g>
+
+  <line x1="112" y1="156" x2="112" y2="665" class="life"/>
+  <line x1="297" y1="156" x2="297" y2="665" class="life"/>
+  <line x1="482" y1="156" x2="482" y2="665" class="life"/>
+  <line x1="667" y1="156" x2="667" y2="665" class="life"/>
+  <line x1="852" y1="156" x2="852" y2="665" class="life"/>
+  <line x1="1037" y1="156" x2="1037" y2="665" class="life"/>
+  <line x1="1222" y1="156" x2="1222" y2="665" class="life"/>
+
+  <path class="line" d="M112 205 L297 205"/>
+  <text x="122" y="195" class="msg">Request insight / report / persona / recommendation</text>
+  <path class="line" d="M297 255 L482 255"/>
+  <text x="307" y="245" class="msg">Validate user, tenant, role, client scope</text>
+  <path class="return" d="M482 305 L297 305"/>
+  <text x="318" y="295" class="msg">Authorized context</text>
+  <path class="line" d="M297 355 L667 355"/>
+  <text x="307" y="345" class="msg">Submit task with tenant context</text>
+  <path class="line" d="M667 405 L1222 405"/>
+  <text x="680" y="395" class="msg">Record request metadata</text>
+  <path class="line" d="M667 455 L852 455"/>
+  <text x="680" y="445" class="msg">Query semantic layer with tenant policies</text>
+  <path class="return" d="M852 505 L667 505"/>
+  <text x="690" y="495" class="msg">RLS-filtered processed data</text>
+  <path class="line" d="M667 555 L1037 555"/>
+  <text x="680" y="545" class="msg">Invoke Persona / Creative / Attribution / Media agent</text>
+  <path class="return" d="M1037 605 L667 605"/>
+  <text x="710" y="595" class="msg">Structured output, confidence, citations</text>
+  <path class="line" d="M667 650 L1222 650"/>
+  <text x="680" y="640" class="msg">Record model, tokens, data access, output metadata</text>
+  <path class="return" d="M667 690 L297 690"/>
+  <text x="405" y="680" class="msg">Return approved insight or recommendation</text>
+  <path class="return" d="M297 715 L112 715"/>
+  <text x="130" y="705" class="msg">Display in portal</text>
+</svg>
+

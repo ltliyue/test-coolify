@@ -1,0 +1,129 @@
+flowchart TB
+    subgraph CLIENT_LAYER["Client Layer (React 19 + Vite)"]
+        OPS_APP["Ops Console<br/>frontend/src/apps/ops"]
+        PORTAL_APP["Client Portal<br/>frontend/src/apps/portal"]
+    end
+
+    subgraph API_LAYER["API Layer — FastAPI :8000"]
+        MIDDLEWARE["Middleware Chain<br/>CORS → Security Headers<br/>→ HIPAA Session Guard<br/>→ Request Logging"]
+        ROUTERS["21 Routers /api/v1/*<br/>auth · tenants · ai<br/>personas · creatives · attribution<br/>campaigns · reports · portal<br/>ws · notifications · compliance"]
+        WS["WebSocket /ws<br/>real-time (F-17)"]
+        MIDDLEWARE --> ROUTERS
+        MIDDLEWARE --> WS
+    end
+
+    subgraph SERVICE_LAYER["Service Layer (backend/app/services/)"]
+        direction LR
+        subgraph AI_PILLAR["AI Pillar"]
+            BRAIN["Brain Router<br/>brain.route_request"]
+            PERSONA_AG["Persona Agent<br/>Opus 4.7 / 4.6"]
+            CREATIVE_AG["Creative Agent<br/>Sonnet 4.6"]
+            ATTR_AG["Attribution Agent<br/>Sonnet 4.6"]
+            BRAIN --> PERSONA_AG
+            BRAIN --> CREATIVE_AG
+            BRAIN --> ATTR_AG
+        end
+
+        subgraph ETL_PILLAR["ETL Pipeline"]
+            ETL_RUNNER["ETL Runner<br/>extract→PHI scan<br/>→anonymize→transform→load"]
+            ADAPTERS["9 Adapters<br/>ga4 meta hubspot dv360<br/>stackadapt leadrx liveramp<br/>quorum tiktok"]
+            ETL_RUNNER --> ADAPTERS
+        end
+
+        subgraph BUSINESS["Business Services"]
+            CAMPAIGN_Q["Campaign Query"]
+            BUDGET["Budget Pacing"]
+            REPORTS_SVC["Reports / PDF (F-22)"]
+            AUDIENCE["Audience Export (F-21)"]
+            NOTIF["Notifications (F-17)"]
+        end
+    end
+
+    subgraph COMPLIANCE["Compliance Layer"]
+        PHI_DET["PHI Detector<br/>HIPAA Safe Harbor 18 types"]
+        ANON["Anonymizer<br/>SHA-256 + IP truncation"]
+        FERNET["PII Crypto<br/>Fernet"]
+        AUDIT["Audit Log<br/>INSERT-only"]
+    end
+
+    subgraph ASYNC_LAYER["Async Layer"]
+        CELERY["Celery Workers<br/>concurrency=4"]
+        AIRFLOW["Airflow 2.9.1<br/>scheduler + webserver"]
+    end
+
+    subgraph DATA_LAYER["Data Layer"]
+        PG[("PostgreSQL 15 + pgvector<br/>Business DB · 19 ORM models")]
+        WAREHOUSE[("WarehouseClient<br/>DuckDB dev ↔ Snowflake prod")]
+        REDIS[("Redis 7<br/>db0 cache + sessions<br/>db1 broker · db2 results")]
+        MINIO[("MinIO / S3<br/>reports · assets")]
+    end
+
+    subgraph EXTERNAL["External Services"]
+        OR_EXT["OpenRouter"]
+        LF_EXT["Langfuse"]
+        SENTRY_EXT["Sentry"]
+        SMTP["SMTP"]
+        PLATFORMS_EXT["9 Data Platforms"]
+    end
+
+    OPS_APP -.->|REST + WS| MIDDLEWARE
+    PORTAL_APP -.->|REST + WS| MIDDLEWARE
+
+    ROUTERS --> BRAIN
+    ROUTERS --> CAMPAIGN_Q
+    ROUTERS --> ETL_RUNNER
+    ROUTERS --> REPORTS_SVC
+    ROUTERS --> AUDIENCE
+    ROUTERS --> NOTIF
+    WS --> NOTIF
+
+    ROUTERS -.->|enforced| AUDIT
+    ROUTERS -.->|encrypted IO| FERNET
+
+    PERSONA_AG -->|POST chat completions| OR_EXT
+    CREATIVE_AG -->|POST chat completions| OR_EXT
+    ATTR_AG -->|POST chat completions| OR_EXT
+    PERSONA_AG -.->|trace| LF_EXT
+    BRAIN -->|token_usage| PG
+
+    ETL_RUNNER --> PHI_DET
+    ETL_RUNNER --> ANON
+    ETL_RUNNER --> WAREHOUSE
+    ETL_RUNNER -->|OAuth / API Key| PLATFORMS_EXT
+
+    CELERY -->|tasks| REPORTS_SVC
+    CELERY -->|tasks| ETL_RUNNER
+    CELERY <-->|broker / result| REDIS
+    AIRFLOW -->|trigger| ETL_RUNNER
+
+    REPORTS_SVC --> MINIO
+    REPORTS_SVC --> SMTP
+
+    ROUTERS --> PG
+    ROUTERS --> REDIS
+    CAMPAIGN_Q --> WAREHOUSE
+    AUDIENCE --> WAREHOUSE
+    AUDIT --> PG
+    FERNET <--> PG
+
+    SERVICE_LAYER -.->|exceptions| SENTRY_EXT
+
+    classDef client fill:#e0f2fe,stroke:#0284c7
+    classDef api fill:#fef3c7,stroke:#d97706
+    classDef ai fill:#fce7f3,stroke:#db2777
+    classDef etl fill:#dcfce7,stroke:#16a34a
+    classDef biz fill:#ede9fe,stroke:#7c3aed
+    classDef compl fill:#fee2e2,stroke:#dc2626
+    classDef async fill:#fef9c3,stroke:#ca8a04
+    classDef data fill:#dbeafe,stroke:#2563eb
+    classDef ext fill:#e5e7eb,stroke:#4b5563
+
+    class OPS_APP,PORTAL_APP client
+    class MIDDLEWARE,ROUTERS,WS api
+    class BRAIN,PERSONA_AG,CREATIVE_AG,ATTR_AG ai
+    class ETL_RUNNER,ADAPTERS etl
+    class CAMPAIGN_Q,BUDGET,REPORTS_SVC,AUDIENCE,NOTIF biz
+    class PHI_DET,ANON,FERNET,AUDIT compl
+    class CELERY,AIRFLOW async
+    class PG,WAREHOUSE,REDIS,MINIO data
+    class OR_EXT,LF_EXT,SENTRY_EXT,SMTP,PLATFORMS_EXT ext

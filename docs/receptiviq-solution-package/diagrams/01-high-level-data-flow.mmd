@@ -1,0 +1,104 @@
+flowchart LR
+    subgraph EXT["External Data Sources"]
+        EXP["Experian"]
+        TU["TransUnion"]
+        NLS["Nielsen"]
+        PLC["Placer IQ"]
+        QRM["Quorum"]
+        DV["DV360"]
+        META["Meta"]
+        TT["TikTok"]
+        TTD["The Trade Desk"]
+        GA4["GA4"]
+        TR["Tresorit"]
+    end
+
+    subgraph ING["Secure Ingestion Layer"]
+        AUTH["Credential Vault"]
+        FILE["Encrypted File Intake"]
+        API["API Extractors"]
+        CLASS["Data Classification"]
+    end
+
+    subgraph COMP["Compliance Boundary"]
+        RAWPII["Raw PII-Segregated Lake"]
+        TOKEN["Tokenization / Hashing"]
+    end
+
+    subgraph ELT["ELT Pipeline"]
+        LOAD["Load to Staging"]
+        NORM["Transform: Normalize"]
+        DEDUP["Deduplicate"]
+        VALID["Validate"]
+        ENRICH["Enrich"]
+        INDEX["Index"]
+        QUAR["Quarantine"]
+    end
+
+    subgraph WH["Snowflake Warehouse"]
+        RAWNON["Processed Lake"]
+        RLS["Row-Level Security"]
+        SEM["Semantic Layer"]
+        VEC["AI Retrieval Index"]
+        CLONE["Zero-Copy Clones"]
+    end
+
+    subgraph AI["Core AI Brain"]
+        ROUTER["LLM Router"]
+        CTX["Context Builder"]
+        ORCH["Agent Orchestrator"]
+        AUDIT["AI Audit + Token Budget"]
+    end
+
+    subgraph AGENTS["Pillar Agents"]
+        PA["Persona Agent"]
+        CA["Creative Agent"]
+        AA["Attribution Agent"]
+        MA["Media Agent"]
+    end
+
+    subgraph APP["Application and Portal Layer"]
+        MR["Market Research"]
+        CE["Creative Engine"]
+        MB["Media Buying"]
+        AT["Attribution"]
+        CP["Client Portal"]
+        AP["Agency Portal"]
+    end
+
+    EXP --> API
+    TU --> API
+    NLS --> API
+    PLC --> API
+    QRM --> API
+    DV --> API
+    META --> API
+    TT --> API
+    TTD --> API
+    GA4 --> API
+    TR --> FILE
+    AUTH --> API
+    API --> CLASS
+    FILE --> CLASS
+    CLASS -->|PII / PHI| RAWPII
+    RAWPII --> TOKEN
+    TOKEN --> LOAD
+    CLASS -->|Non-PII| LOAD
+    LOAD --> NORM --> DEDUP --> VALID
+    VALID -->|pass| ENRICH --> INDEX --> RAWNON
+    VALID -->|fail| QUAR
+    RAWNON --> RLS --> SEM --> VEC --> CTX
+    RLS --> CLONE
+    SEM --> CTX --> ROUTER --> ORCH
+    AUDIT --- ROUTER
+    AUDIT --- ORCH
+    ORCH --> PA --> MR
+    ORCH --> CA --> CE
+    ORCH --> AA --> AT
+    ORCH --> MA --> MB
+    MR --> AP
+    CE --> AP
+    MB --> AP
+    AT --> AP
+    AT --> CP
+    MR --> CP

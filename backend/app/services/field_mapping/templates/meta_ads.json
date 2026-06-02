@@ -1,0 +1,92 @@
+{
+  "platform": "meta_ads",
+  "version": "1.0",
+  "raw_fields": [
+    { "name": "campaign_id", "type": "string", "sample": "23851234567890" },
+    { "name": "campaign_name", "type": "string", "sample": "Summer Sale 2026" },
+    { "name": "campaign_status", "type": "string", "sample": "ACTIVE" },
+    {
+      "name": "adset_name",
+      "type": "string",
+      "sample": "Lookalike - US 25-44"
+    },
+    { "name": "ad_name", "type": "string", "sample": "Carousel - Blue CTA" },
+    { "name": "impressions", "type": "integer", "sample": 15234 },
+    { "name": "link_clicks", "type": "integer", "sample": 342 },
+    { "name": "spend", "type": "float", "sample": 125.5 },
+    { "name": "actions_offsite_conversion", "type": "integer", "sample": 18 },
+    { "name": "ctr", "type": "float", "sample": 2.24 },
+    { "name": "cpm", "type": "float", "sample": 8.24 },
+    { "name": "cost_per_action_type", "type": "float", "sample": 6.97 },
+    { "name": "action_values", "type": "float", "sample": 540.0 },
+    { "name": "date_start", "type": "date", "sample": "2026-03-01" },
+    { "name": "age", "type": "string", "sample": "25-34" },
+    { "name": "gender", "type": "string", "sample": "female" },
+    { "name": "country", "type": "string", "sample": "US" },
+    { "name": "device_platform", "type": "string", "sample": "mobile" }
+  ],
+  "default_mappings": [
+    {
+      "source_field": "campaign_id",
+      "target_field": "campaign_id",
+      "transform": null
+    },
+    {
+      "source_field": "campaign_name",
+      "target_field": "campaign_name",
+      "transform": null
+    },
+    {
+      "source_field": "campaign_status",
+      "target_field": "campaign_status",
+      "transform": null
+    },
+    {
+      "source_field": "adset_name",
+      "target_field": "ad_group",
+      "transform": null
+    },
+    { "source_field": "ad_name", "target_field": "ad_name", "transform": null },
+    {
+      "source_field": "impressions",
+      "target_field": "impressions",
+      "transform": null
+    },
+    {
+      "source_field": "link_clicks",
+      "target_field": "clicks",
+      "transform": null
+    },
+    { "source_field": "spend", "target_field": "cost", "transform": null },
+    {
+      "source_field": "actions_offsite_conversion",
+      "target_field": "conversions",
+      "transform": null
+    },
+    { "source_field": "ctr", "target_field": "ctr", "transform": null },
+    { "source_field": "cpm", "target_field": "cpm", "transform": null },
+    {
+      "source_field": "cost_per_action_type",
+      "target_field": "cpc",
+      "transform": null
+    },
+    {
+      "source_field": "action_values",
+      "target_field": "conversion_value",
+      "transform": null
+    },
+    { "source_field": "date_start", "target_field": "date", "transform": null },
+    { "source_field": "age", "target_field": "age", "transform": null },
+    { "source_field": "gender", "target_field": "gender", "transform": null },
+    {
+      "source_field": "country",
+      "target_field": "location",
+      "transform": null
+    },
+    {
+      "source_field": "device_platform",
+      "target_field": "device",
+      "transform": null
+    }
+  ]
+}

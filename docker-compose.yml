@@ -1,0 +1,186 @@
+version: "3.9"
+
+x-backend-env: &backend-env
+  DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://receptiviq:receptiviq@host.docker.internal:5432/receptiviq}
+  SYNC_DATABASE_URL: ${SYNC_DATABASE_URL:-postgresql+psycopg2://receptiviq:receptiviq@host.docker.internal:5432/receptiviq}
+  SECRET_KEY: ${SECRET_KEY:-dev-secret-key}
+  ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+  REDIS_URL: redis://redis:6379/0
+  CELERY_BROKER_URL: redis://redis:6379/1
+  CELERY_RESULT_BACKEND: redis://redis:6379/2
+  MINIO_ENDPOINT: minio:9000
+  MINIO_EXTERNAL_ENDPOINT: http://localhost:9000
+  MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+  MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
+  MINIO_BUCKET: receptiviq
+  OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+  WAREHOUSE_BACKEND: ${WAREHOUSE_BACKEND:-duckdb}
+  SNOWFLAKE_ACCOUNT: ${SNOWFLAKE_ACCOUNT}
+  SNOWFLAKE_USER: ${SNOWFLAKE_USER}
+  SNOWFLAKE_PASSWORD: ${SNOWFLAKE_PASSWORD}
+  LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY}
+  LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY}
+  LANGFUSE_HOST: http://langfuse:3100
+  SENTRY_DSN: ${SENTRY_DSN}
+  AIRFLOW_BASE_URL: http://airflow-webserver:8080
+  AIRFLOW_USERNAME: admin
+  AIRFLOW_PASSWORD: admin
+  GA4_CLIENT_ID: ${GA4_CLIENT_ID}
+  GA4_CLIENT_SECRET: ${GA4_CLIENT_SECRET}
+  META_APP_ID: ${META_APP_ID}
+  META_APP_SECRET: ${META_APP_SECRET}
+  HUBSPOT_CLIENT_ID: ${HUBSPOT_CLIENT_ID}
+  HUBSPOT_CLIENT_SECRET: ${HUBSPOT_CLIENT_SECRET}
+
+x-airflow-env: &airflow-env
+  AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: sqlite:////opt/airflow/airflow.db
+  AIRFLOW__CORE__EXECUTOR: LocalExecutor
+  AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW__CORE__FERNET_KEY:-}
+  AIRFLOW__WEBSERVER__SECRET_KEY: ${SECRET_KEY:-dev-secret-key}
+  AIRFLOW__LOGGING__LOGGING_LEVEL: WARNING
+  BACKEND_PATH: /opt/airflow/backend
+  DATABASE_URL: postgresql+psycopg2://receptiviq:receptiviq@host.docker.internal:5432/receptiviq
+  ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+  OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+  WAREHOUSE_BACKEND: ${WAREHOUSE_BACKEND:-duckdb}
+  SNOWFLAKE_ACCOUNT: ${SNOWFLAKE_ACCOUNT}
+  SNOWFLAKE_USER: ${SNOWFLAKE_USER}
+  SNOWFLAKE_PASSWORD: ${SNOWFLAKE_PASSWORD}
+  GA4_CLIENT_ID: ${GA4_CLIENT_ID}
+  GA4_CLIENT_SECRET: ${GA4_CLIENT_SECRET}
+  META_APP_ID: ${META_APP_ID}
+  META_APP_SECRET: ${META_APP_SECRET}
+
+services:
+  # ── Backend API ────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      <<: *backend-env
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - redis
+      - minio
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # ── Celery Worker ──────────────────────────────────────
+  celery:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      <<: *backend-env
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - redis
+    command: celery -A app.worker worker --loglevel=info --concurrency=4
+
+  # ── Frontend ───────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000
+      VITE_WS_URL: ws://localhost:8000
+      VITE_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+    command: npm run dev -- --host
+
+  # ── Redis ──────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  # ── MinIO (Object Storage) ─────────────────────────────
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+
+  # ── Langfuse (LLM Observability) ──────────────────────
+  langfuse:
+    image: langfuse/langfuse:2
+    ports:
+      - "3100:3000"
+    environment:
+      DATABASE_URL: postgresql://receptiviq:receptiviq@host.docker.internal:5432/langfuse
+      NEXTAUTH_SECRET: ${SECRET_KEY:-dev-secret}
+      NEXTAUTH_URL: http://localhost:3100
+      SALT: langfuse-salt
+
+  # ── Airflow Init ───────────────────────────────────────
+  airflow-init:
+    image: apache/airflow:2.9.1
+    environment:
+      <<: *airflow-env
+    volumes:
+      - airflow-db:/opt/airflow
+      - ./backend/dags:/opt/airflow/dags
+      - ./backend:/opt/airflow/backend
+    entrypoint: >
+      bash -c "
+        pip install -q google-analytics-data google-auth-oauthlib
+                       sqlalchemy psycopg2-binary cryptography httpx
+                       snowflake-connector-python duckdb &&
+        airflow db migrate &&
+        airflow users create --username admin --firstname Admin --lastname User
+          --role Admin --email admin@receptiviq.com --password admin || true
+      "
+    restart: "no"
+
+  # ── Airflow Webserver ──────────────────────────────────
+  airflow-webserver:
+    image: apache/airflow:2.9.1
+    ports:
+      - "8080:8080"
+    environment:
+      <<: *airflow-env
+    volumes:
+      - airflow-db:/opt/airflow
+      - ./backend/dags:/opt/airflow/dags
+      - ./backend:/opt/airflow/backend
+    command: webserver
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+
+  # ── Airflow Scheduler ──────────────────────────────────
+  airflow-scheduler:
+    image: apache/airflow:2.9.1
+    environment:
+      <<: *airflow-env
+    volumes:
+      - airflow-db:/opt/airflow
+      - ./backend/dags:/opt/airflow/dags
+      - 
+      - ./backend:/opt/airflow/backend
+    command: scheduler
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+
+volumes:
+  redis-data:
+  minio-data:
+  airflow-db:

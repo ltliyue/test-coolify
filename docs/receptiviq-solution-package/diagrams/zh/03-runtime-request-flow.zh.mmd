@@ -1,0 +1,22 @@
+sequenceDiagram
+    participant User as 代理商 / 客户用户
+    participant App as ReceptivIQ 门户
+    participant Auth as Auth + RBAC
+    participant Brain as Core AI Brain
+    participant Snow as Snowflake
+    participant Agent as Pillar Agent
+    participant Audit as 审计日志
+
+    User->>App: 请求洞察、报告、persona、创意或媒体建议
+    App->>Auth: 校验用户、租户、角色和 client scope
+    Auth-->>App: 返回授权上下文
+    App->>Brain: 提交带租户上下文的任务
+    Brain->>Audit: 记录请求元数据
+    Brain->>Snow: 按租户策略查询语义层
+    Snow-->>Brain: 返回 RLS 过滤后的 processed data
+    Brain->>Agent: 调用对应 pillar agent
+    Agent-->>Brain: 返回结构化输出、置信度和引用
+    Brain->>Audit: 记录模型、token、数据访问和输出元数据
+    Brain-->>App: 返回洞察或建议
+    App-->>User: 在门户中展示
+

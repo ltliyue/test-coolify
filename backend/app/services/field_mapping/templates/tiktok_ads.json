@@ -1,0 +1,71 @@
+{
+  "platform": "tiktok_ads",
+  "version": "1.0",
+  "raw_fields": [
+    { "name": "campaign_id", "type": "string", "sample": "17749503" },
+    { "name": "campaign_name", "type": "string", "sample": "Gen Z Awareness" },
+    {
+      "name": "adgroup_name",
+      "type": "string",
+      "sample": "Interest - Fashion"
+    },
+    { "name": "ad_name", "type": "string", "sample": "UGC Video 15s" },
+    { "name": "impression", "type": "integer", "sample": 45000 },
+    { "name": "click", "type": "integer", "sample": 1800 },
+    { "name": "spend", "type": "float", "sample": 280.0 },
+    { "name": "conversion", "type": "integer", "sample": 55 },
+    { "name": "total_complete_payment_rate", "type": "float", "sample": 3.06 },
+    { "name": "ctr", "type": "float", "sample": 4.0 },
+    { "name": "cpm", "type": "float", "sample": 6.22 },
+    { "name": "cpc", "type": "float", "sample": 0.16 },
+    { "name": "stat_datetime", "type": "date", "sample": "2026-03-12" },
+    { "name": "age", "type": "string", "sample": "18-24" },
+    { "name": "gender", "type": "string", "sample": "FEMALE" },
+    { "name": "country_code", "type": "string", "sample": "US" }
+  ],
+  "default_mappings": [
+    {
+      "source_field": "campaign_id",
+      "target_field": "campaign_id",
+      "transform": null
+    },
+    {
+      "source_field": "campaign_name",
+      "target_field": "campaign_name",
+      "transform": null
+    },
+    {
+      "source_field": "adgroup_name",
+      "target_field": "ad_group",
+      "transform": null
+    },
+    { "source_field": "ad_name", "target_field": "ad_name", "transform": null },
+    {
+      "source_field": "impression",
+      "target_field": "impressions",
+      "transform": null
+    },
+    { "source_field": "click", "target_field": "clicks", "transform": null },
+    { "source_field": "spend", "target_field": "cost", "transform": null },
+    {
+      "source_field": "conversion",
+      "target_field": "conversions",
+      "transform": null
+    },
+    { "source_field": "ctr", "target_field": "ctr", "transform": null },
+    { "source_field": "cpm", "target_field": "cpm", "transform": null },
+    { "source_field": "cpc", "target_field": "cpc", "transform": null },
+    {
+      "source_field": "stat_datetime",
+      "target_field": "date",
+      "transform": null
+    },
+    { "source_field": "age", "target_field": "age", "transform": null },
+    { "source_field": "gender", "target_field": "gender", "transform": null },
+    {
+      "source_field": "country_code",
+      "target_field": "location",
+      "transform": null
+    }
+  ]
+}

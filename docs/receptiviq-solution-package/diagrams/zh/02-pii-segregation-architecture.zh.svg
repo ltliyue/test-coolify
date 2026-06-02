@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="760" viewBox="0 0 1180 760">
+  <defs>
+    <marker id="b" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#34516d"/></marker>
+    <style>
+      .title{font:700 26px Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#152238}
+      .section{font:700 16px Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#17324d}
+      .label{font:600 13px Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#1f2d3d}
+      .small{font:500 12px Arial,'PingFang SC','Microsoft YaHei',sans-serif;fill:#4b5d72}
+      .group{fill:#f7fbff;stroke:#b8cce0;stroke-width:1.5;rx:10}
+      .pii{fill:#fff4f2;stroke:#d9857c;stroke-width:1.7;rx:10}
+      .proc{fill:#f2fbf7;stroke:#8cc7a4;stroke-width:1.5;rx:10}
+      .ai{fill:#f5f2ff;stroke:#a99ce3;stroke-width:1.5;rx:10}
+      .box{fill:#fff;stroke:#9bb3c8;stroke-width:1.3;rx:8}
+      .line{stroke:#34516d;stroke-width:2;fill:none;marker-end:url(#b)}
+      .dash{stroke:#b16050;stroke-width:2;fill:none;stroke-dasharray:6 5;marker-end:url(#b)}
+    </style>
+  </defs>
+  <rect width="1180" height="760" fill="#fff"/>
+  <text x="42" y="50" class="title">PII 隔离架构</text>
+  <text x="42" y="76" class="small">敏感数据先分类再存储。原始 PII/PHI 保持隔离，AI 只消费安全上下文。</text>
+
+  <rect x="45" y="130" width="205" height="420" class="group"/>
+  <text x="70" y="160" class="section">来源输入</text>
+  <rect x="75" y="195" width="145" height="44" class="box"/><text x="148" y="222" text-anchor="middle" class="label">CRM / 客户名单</text>
+  <rect x="75" y="265" width="145" height="44" class="box"/><text x="148" y="292" text-anchor="middle" class="label">广告平台报表</text>
+  <rect x="75" y="335" width="145" height="44" class="box"/><text x="148" y="362" text-anchor="middle" class="label">GA4 事件</text>
+  <rect x="75" y="405" width="145" height="44" class="box"/><text x="148" y="432" text-anchor="middle" class="label">受众数据</text>
+
+  <rect x="305" y="170" width="210" height="230" class="group"/>
+  <text x="330" y="200" class="section">分类关口</text>
+  <rect x="340" y="235" width="140" height="48" class="box"/><text x="410" y="264" text-anchor="middle" class="label">PII / PHI 扫描</text>
+  <rect x="340" y="315" width="140" height="48" class="box"/><text x="410" y="344" text-anchor="middle" class="label">租户数据策略</text>
+
+  <rect x="585" y="110" width="235" height="245" class="pii"/>
+  <text x="612" y="140" class="section">PII 原始隔离湖</text>
+  <rect x="625" y="175" width="155" height="44" class="box"/><text x="702" y="202" text-anchor="middle" class="label">加密对象存储</text>
+  <rect x="625" y="245" width="155" height="44" class="box"/><text x="702" y="272" text-anchor="middle" class="label">身份映射表</text>
+  <rect x="625" y="310" width="155" height="28" class="box"/><text x="702" y="329" text-anchor="middle" class="small">DSAR / 删除</text>
+
+  <rect x="585" y="430" width="235" height="220" class="proc"/>
+  <text x="612" y="460" class="section">Processed Lake</text>
+  <rect x="625" y="495" width="155" height="36" class="box"/><text x="702" y="518" text-anchor="middle" class="label">哈希标识符</text>
+  <rect x="625" y="550" width="155" height="36" class="box"/><text x="702" y="573" text-anchor="middle" class="label">统一营销 Schema</text>
+  <rect x="625" y="605" width="155" height="36" class="box"/><text x="702" y="628" text-anchor="middle" class="label">聚合指标</text>
+
+  <rect x="900" y="270" width="230" height="220" class="ai"/>
+  <text x="925" y="300" class="section">AI 使用边界</text>
+  <rect x="940" y="335" width="150" height="36" class="box"/><text x="1015" y="358" text-anchor="middle" class="label">安全上下文构建</text>
+  <rect x="940" y="390" width="150" height="44" class="box"/><text x="1015" y="410" text-anchor="middle" class="label">Prompt 载荷</text><text x="1015" y="427" text-anchor="middle" class="small">无原始 PII</text>
+  <rect x="940" y="450" width="150" height="28" class="box"/><text x="1015" y="469" text-anchor="middle" class="small">访问审计</text>
+
+  <path class="line" d="M220 217 C265 217,295 259,340 259"/>
+  <path class="line" d="M220 287 C265 287,295 259,340 259"/>
+  <path class="line" d="M220 357 C265 357,295 259,340 259"/>
+  <path class="line" d="M220 427 C265 427,295 259,340 259"/>
+  <path class="line" d="M410 315 L410 283"/>
+  <path class="dash" d="M480 259 C525 259,560 197,625 197"/>
+  <text x="530" y="225" class="small">PII / PHI</text>
+  <path class="dash" d="M702 289 C702 390,702 450,702 495"/>
+  <text x="722" y="405" class="small">hash / token</text>
+  <path class="line" d="M480 259 C530 259,565 568,625 568"/>
+  <text x="526" y="555" class="small">非 PII</text>
+  <path class="line" d="M780 623 C840 623,880 353,940 353"/>
+  <path class="line" d="M1015 371 L1015 390"/>
+  <path class="line" d="M1015 434 L1015 450"/>
+</svg>
+

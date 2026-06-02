@@ -1,0 +1,18 @@
+flowchart TB
+    L1["1. 数据源层<br/>Experian、TransUnion、Nielsen、Placer IQ、Quorum、<br/>DV360、Meta、TikTok、The Trade Desk、GA4、Tresorit"]
+    L2["2. 摄取与凭证层<br/>OAuth、API Key、Service Account、加密文件接入、<br/>租户级凭证保险库"]
+    L3["3. 合规与分类层<br/>PII/PHI 扫描、数据分类、数据驻留策略、<br/>保留策略、审计"]
+    L4A["4A. PII 原始隔离湖<br/>加密原始敏感数据、租户级密钥、受限访问"]
+    L4B["4B. ELT 管道<br/>extract、classify、load，然后在 Snowflake 内 transform：<br/>normalize、deduplicate、validate、enrich、index"]
+    L5["5. Snowflake 数据仓库<br/>processed lake、canonical schema、RLS、<br/>zero-copy cloning、semantic layer、AI retrieval index"]
+    L6["6. Core AI Brain<br/>LLM 路由、上下文构建、agent 编排、<br/>token 预算、prompt 与访问审计"]
+    L7["7. Agent 层<br/>Persona Agent、Creative Agent、<br/>Attribution Agent、Media Agent"]
+    L8["8. MVP 功能柱<br/>Market Research、Creative Engine、<br/>Media Buying、Attribution、Client Portal"]
+    L9["9. 应用层<br/>Agency Portal、Client Portal、<br/>Admin Console、Reporting Exports"]
+
+    L1 --> L2 --> L3
+    L3 -->|PII / PHI| L4A
+    L3 -->|非 PII| L4B
+    L4A -->|hash / token join key| L4B
+    L4B --> L5 --> L6 --> L7 --> L8 --> L9
+

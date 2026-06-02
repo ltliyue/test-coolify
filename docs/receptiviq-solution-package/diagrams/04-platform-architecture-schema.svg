@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="1280" viewBox="0 0 1180 1280">
+  <defs>
+    <marker id="arrow4" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#315b7c"/>
+    </marker>
+    <style>
+      .title{font:700 26px Arial,sans-serif;fill:#152238}
+      .layerTitle{font:700 17px Arial,sans-serif;fill:#17324d}
+      .label{font:600 13px Arial,sans-serif;fill:#24364a}
+      .small{font:500 12px Arial,sans-serif;fill:#4b5d72}
+      .layer{fill:#f7fbff;stroke:#9bb3c8;stroke-width:1.5;rx:10}
+      .pii{fill:#fff4f2;stroke:#d9857c;stroke-width:1.6;rx:10}
+      .brain{fill:#f5f2ff;stroke:#a99ce3;stroke-width:1.5;rx:10}
+      .pillars{fill:#f2fbf7;stroke:#8cc7a4;stroke-width:1.5;rx:10}
+      .chip{fill:#fff;stroke:#bdd0df;stroke-width:1.1;rx:7}
+      .line{stroke:#315b7c;stroke-width:2.2;fill:none;marker-end:url(#arrow4)}
+      .dash{stroke:#b16050;stroke-width:2;fill:none;stroke-dasharray:6 5;marker-end:url(#arrow4)}
+    </style>
+  </defs>
+
+  <rect width="1180" height="1280" fill="#ffffff"/>
+  <text x="50" y="50" class="title">ReceptivIQ Platform Architecture Schema</text>
+  <text x="50" y="76" class="small">Layered architecture from external sources to ELT, Snowflake, Core AI Brain, agents, pillars, and portals.</text>
+
+  <rect x="95" y="115" width="990" height="120" class="layer"/>
+  <text x="125" y="148" class="layerTitle">1. Data Sources Layer</text>
+  <text x="125" y="176" class="small">Priority 1 integrations and secure file transfer inputs.</text>
+  <g>
+    <rect x="125" y="194" width="84" height="28" class="chip"/><text x="167" y="213" text-anchor="middle" class="small">Experian</text>
+    <rect x="220" y="194" width="100" height="28" class="chip"/><text x="270" y="213" text-anchor="middle" class="small">TransUnion</text>
+    <rect x="331" y="194" width="78" height="28" class="chip"/><text x="370" y="213" text-anchor="middle" class="small">Nielsen</text>
+    <rect x="420" y="194" width="82" height="28" class="chip"/><text x="461" y="213" text-anchor="middle" class="small">Placer IQ</text>
+    <rect x="513" y="194" width="74" height="28" class="chip"/><text x="550" y="213" text-anchor="middle" class="small">Quorum</text>
+    <rect x="598" y="194" width="62" height="28" class="chip"/><text x="629" y="213" text-anchor="middle" class="small">DV360</text>
+    <rect x="671" y="194" width="58" height="28" class="chip"/><text x="700" y="213" text-anchor="middle" class="small">Meta</text>
+    <rect x="740" y="194" width="62" height="28" class="chip"/><text x="771" y="213" text-anchor="middle" class="small">TikTok</text>
+    <rect x="813" y="194" width="112" height="28" class="chip"/><text x="869" y="213" text-anchor="middle" class="small">The Trade Desk</text>
+    <rect x="936" y="194" width="50" height="28" class="chip"/><text x="961" y="213" text-anchor="middle" class="small">GA4</text>
+    <rect x="997" y="194" width="70" height="28" class="chip"/><text x="1032" y="213" text-anchor="middle" class="small">Tresorit</text>
+  </g>
+
+  <rect x="95" y="280" width="990" height="105" class="layer"/>
+  <text x="125" y="313" class="layerTitle">2. Ingestion and Credential Layer</text>
+  <text x="125" y="341" class="small">OAuth, API keys, service accounts, encrypted file intake, tenant-scoped credential vault.</text>
+  <rect x="125" y="355" width="190" height="28" class="chip"/><text x="220" y="374" text-anchor="middle" class="small">Credential Vault</text>
+  <rect x="335" y="355" width="170" height="28" class="chip"/><text x="420" y="374" text-anchor="middle" class="small">API Extractors</text>
+  <rect x="525" y="355" width="190" height="28" class="chip"/><text x="620" y="374" text-anchor="middle" class="small">Encrypted File Intake</text>
+  <rect x="735" y="355" width="210" height="28" class="chip"/><text x="840" y="374" text-anchor="middle" class="small">Connector Framework</text>
+
+  <rect x="95" y="430" width="990" height="105" class="pii"/>
+  <text x="125" y="463" class="layerTitle">3. Compliance and Classification Layer</text>
+  <text x="125" y="491" class="small">PII/PHI scan, data classification, residency policy, retention policy, access audit.</text>
+  <rect x="125" y="505" width="160" height="28" class="chip"/><text x="205" y="524" text-anchor="middle" class="small">PII/PHI Scan</text>
+  <rect x="305" y="505" width="180" height="28" class="chip"/><text x="395" y="524" text-anchor="middle" class="small">Residency Policy</text>
+  <rect x="505" y="505" width="180" height="28" class="chip"/><text x="595" y="524" text-anchor="middle" class="small">Retention Policy</text>
+  <rect x="705" y="505" width="150" height="28" class="chip"/><text x="780" y="524" text-anchor="middle" class="small">Audit</text>
+
+  <rect x="95" y="585" width="470" height="145" class="pii"/>
+  <text x="125" y="618" class="layerTitle">4A. Raw PII-Segregated Lake</text>
+  <text x="125" y="646" class="small">Encrypted raw sensitive data with tenant-level keys and restricted access.</text>
+  <rect x="125" y="675" width="160" height="32" class="chip"/><text x="205" y="696" text-anchor="middle" class="small">Tenant Keys</text>
+  <rect x="305" y="675" width="210" height="32" class="chip"/><text x="410" y="696" text-anchor="middle" class="small">Restricted Identity Map</text>
+
+  <rect x="615" y="585" width="470" height="145" class="layer"/>
+  <text x="645" y="618" class="layerTitle">4B. ELT Pipeline</text>
+  <text x="645" y="646" class="small">Extract, classify, load, then transform in Snowflake.</text>
+  <rect x="645" y="675" width="90" height="32" class="chip"/><text x="690" y="696" text-anchor="middle" class="small">Normalize</text>
+  <rect x="745" y="675" width="95" height="32" class="chip"/><text x="792" y="696" text-anchor="middle" class="small">Dedup</text>
+  <rect x="850" y="675" width="90" height="32" class="chip"/><text x="895" y="696" text-anchor="middle" class="small">Validate</text>
+  <rect x="950" y="675" width="90" height="32" class="chip"/><text x="995" y="696" text-anchor="middle" class="small">Enrich</text>
+
+  <rect x="95" y="780" width="990" height="130" class="layer"/>
+  <text x="125" y="813" class="layerTitle">5. Snowflake Warehouse</text>
+  <text x="125" y="841" class="small">Processed lake, canonical schema, row-level security, zero-copy cloning, semantic layer, AI retrieval index.</text>
+  <rect x="125" y="870" width="135" height="28" class="chip"/><text x="192" y="889" text-anchor="middle" class="small">Processed Lake</text>
+  <rect x="275" y="870" width="145" height="28" class="chip"/><text x="347" y="889" text-anchor="middle" class="small">Canonical Schema</text>
+  <rect x="435" y="870" width="105" height="28" class="chip"/><text x="487" y="889" text-anchor="middle" class="small">RLS</text>
+  <rect x="555" y="870" width="130" height="28" class="chip"/><text x="620" y="889" text-anchor="middle" class="small">Semantic Layer</text>
+  <rect x="700" y="870" width="150" height="28" class="chip"/><text x="775" y="889" text-anchor="middle" class="small">AI Retrieval Index</text>
+  <rect x="865" y="870" width="145" height="28" class="chip"/><text x="937" y="889" text-anchor="middle" class="small">Zero-Copy Clone</text>
+
+  <rect x="95" y="955" width="990" height="110" class="brain"/>
+  <text x="125" y="988" class="layerTitle">6. Core AI Brain</text>
+  <text x="125" y="1016" class="small">LLM router, context builder, agent orchestration, token budget, prompt and access audit.</text>
+  <rect x="125" y="1030" width="145" height="28" class="chip"/><text x="197" y="1049" text-anchor="middle" class="small">Context Builder</text>
+  <rect x="290" y="1030" width="115" height="28" class="chip"/><text x="347" y="1049" text-anchor="middle" class="small">LLM Router</text>
+  <rect x="425" y="1030" width="155" height="28" class="chip"/><text x="502" y="1049" text-anchor="middle" class="small">Agent Orchestrator</text>
+  <rect x="600" y="1030" width="135" height="28" class="chip"/><text x="667" y="1049" text-anchor="middle" class="small">Token Budget</text>
+  <rect x="755" y="1030" width="130" height="28" class="chip"/><text x="820" y="1049" text-anchor="middle" class="small">AI Audit</text>
+
+  <rect x="95" y="1105" width="990" height="80" class="brain"/>
+  <text x="125" y="1138" class="layerTitle">7. Agent Layer</text>
+  <rect x="300" y="1124" width="120" height="32" class="chip"/><text x="360" y="1145" text-anchor="middle" class="small">Persona</text>
+  <rect x="440" y="1124" width="120" height="32" class="chip"/><text x="500" y="1145" text-anchor="middle" class="small">Creative</text>
+  <rect x="580" y="1124" width="120" height="32" class="chip"/><text x="640" y="1145" text-anchor="middle" class="small">Attribution</text>
+  <rect x="720" y="1124" width="120" height="32" class="chip"/><text x="780" y="1145" text-anchor="middle" class="small">Media</text>
+
+  <rect x="95" y="1215" width="470" height="45" class="pillars"/>
+  <text x="120" y="1243" class="label">8. MVP Pillars: Market Research, Creative Engine, Media Buying, Attribution, Client Portal</text>
+  <rect x="615" y="1215" width="470" height="45" class="pillars"/>
+  <text x="640" y="1243" class="label">9. Portal Layer: Agency Portal, Client Portal, Admin Console, Reporting Exports</text>
+
+  <path class="line" d="M590 235 L590 280"/>
+  <path class="line" d="M590 385 L590 430"/>
+  <path class="dash" d="M420 535 C390 560,360 560,330 585"/>
+  <path class="line" d="M760 535 C790 560,820 560,850 585"/>
+  <path class="dash" d="M565 657 C585 657,595 657,615 657"/>
+  <path class="line" d="M850 730 C850 750,590 750,590 780"/>
+  <path class="line" d="M590 910 L590 955"/>
+  <path class="line" d="M590 1065 L590 1105"/>
+  <path class="line" d="M590 1185 L330 1215"/>
+  <path class="line" d="M590 1185 L850 1215"/>
+</svg>

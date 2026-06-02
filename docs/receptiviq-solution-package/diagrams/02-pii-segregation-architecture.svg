@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="820" viewBox="0 0 1280 820">
+  <defs>
+    <marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#34516d"/>
+    </marker>
+    <style>
+      .title{font:700 26px Arial,sans-serif;fill:#152238}
+      .section{font:700 16px Arial,sans-serif;fill:#17324d}
+      .label{font:600 13px Arial,sans-serif;fill:#1f2d3d}
+      .small{font:500 12px Arial,sans-serif;fill:#4b5d72}
+      .group{fill:#f7fbff;stroke:#b8cce0;stroke-width:1.5;rx:10}
+      .pii{fill:#fff4f2;stroke:#d9857c;stroke-width:1.7;rx:10}
+      .proc{fill:#f2fbf7;stroke:#8cc7a4;stroke-width:1.5;rx:10}
+      .ai{fill:#f5f2ff;stroke:#a99ce3;stroke-width:1.5;rx:10}
+      .box{fill:#fff;stroke:#9bb3c8;stroke-width:1.3;rx:8}
+      .line{stroke:#34516d;stroke-width:2;fill:none;marker-end:url(#arrow2)}
+      .dash{stroke:#b16050;stroke-width:2;fill:none;stroke-dasharray:6 5;marker-end:url(#arrow2)}
+    </style>
+  </defs>
+
+  <rect width="1280" height="820" fill="#fff"/>
+  <text x="42" y="50" class="title">PII Segregation Architecture</text>
+  <text x="42" y="76" class="small">Sensitive inputs are classified before storage. Raw PII/PHI remains isolated; AI consumes only safe context.</text>
+
+  <rect x="45" y="125" width="210" height="500" class="group"/>
+  <text x="68" y="155" class="section">Source Inputs</text>
+  <rect x="75" y="185" width="150" height="54" class="box"/>
+  <text x="150" y="207" text-anchor="middle" class="label">CRM Export</text>
+  <text x="150" y="224" text-anchor="middle" class="small">customer lists</text>
+  <rect x="75" y="265" width="150" height="54" class="box"/>
+  <text x="150" y="287" text-anchor="middle" class="label">Ad Reporting</text>
+  <text x="150" y="304" text-anchor="middle" class="small">media metrics</text>
+  <rect x="75" y="345" width="150" height="54" class="box"/>
+  <text x="150" y="367" text-anchor="middle" class="label">GA4 Events</text>
+  <text x="150" y="384" text-anchor="middle" class="small">web analytics</text>
+  <rect x="75" y="425" width="150" height="54" class="box"/>
+  <text x="150" y="447" text-anchor="middle" class="label">Audience Data</text>
+  <text x="150" y="464" text-anchor="middle" class="small">market signals</text>
+
+  <rect x="315" y="165" width="220" height="300" class="group"/>
+  <text x="338" y="195" class="section">Classification Gate</text>
+  <rect x="350" y="230" width="150" height="58" class="box"/>
+  <text x="425" y="254" text-anchor="middle" class="label">PII / PHI</text>
+  <text x="425" y="271" text-anchor="middle" class="label">Scan</text>
+  <rect x="350" y="325" width="150" height="70" class="box"/>
+  <text x="425" y="349" text-anchor="middle" class="label">Tenant Data</text>
+  <text x="425" y="366" text-anchor="middle" class="label">Policy</text>
+  <text x="425" y="383" text-anchor="middle" class="small">residency + retention</text>
+
+  <rect x="610" y="105" width="250" height="285" class="pii"/>
+  <text x="633" y="135" class="section">Raw PII-Segregated Lake</text>
+  <rect x="645" y="170" width="180" height="58" class="box"/>
+  <text x="735" y="194" text-anchor="middle" class="label">Encrypted Object</text>
+  <text x="735" y="211" text-anchor="middle" class="label">Storage</text>
+  <rect x="645" y="255" width="180" height="58" class="box"/>
+  <text x="735" y="279" text-anchor="middle" class="label">Identity Mapping</text>
+  <text x="735" y="296" text-anchor="middle" class="small">restricted access</text>
+  <rect x="645" y="338" width="180" height="34" fill="#fff8f7" stroke="#d9857c" rx="8"/>
+  <text x="735" y="360" text-anchor="middle" class="small">DSAR / Deletion</text>
+
+  <rect x="610" y="455" width="250" height="250" class="proc"/>
+  <text x="633" y="485" class="section">Processed Lake</text>
+  <rect x="645" y="515" width="180" height="44" class="box"/>
+  <text x="735" y="543" text-anchor="middle" class="label">Hashed Identifiers</text>
+  <rect x="645" y="580" width="180" height="44" class="box"/>
+  <text x="735" y="608" text-anchor="middle" class="label">Canonical Schema</text>
+  <rect x="645" y="645" width="180" height="44" class="box"/>
+  <text x="735" y="673" text-anchor="middle" class="label">Aggregated Metrics</text>
+
+  <rect x="940" y="260" width="260" height="260" class="ai"/>
+  <text x="963" y="290" class="section">AI Consumption Boundary</text>
+  <rect x="980" y="325" width="180" height="44" class="box"/>
+  <text x="1070" y="353" text-anchor="middle" class="label">Safe Context Builder</text>
+  <rect x="980" y="390" width="180" height="54" class="box"/>
+  <text x="1070" y="413" text-anchor="middle" class="label">Prompt Payload</text>
+  <text x="1070" y="430" text-anchor="middle" class="small">no raw PII</text>
+  <rect x="980" y="465" width="180" height="34" class="box"/>
+  <text x="1070" y="487" text-anchor="middle" class="small">Prompt + Access Audit</text>
+
+  <path class="line" d="M225 212 C270 212,300 259,350 259"/>
+  <path class="line" d="M225 292 C270 292,300 259,350 259"/>
+  <path class="line" d="M225 372 C270 372,300 259,350 259"/>
+  <path class="line" d="M225 452 C270 452,300 259,350 259"/>
+  <path class="line" d="M425 325 L425 288"/>
+  <path class="dash" d="M500 259 C555 259,585 199,645 199"/>
+  <text x="558" y="224" class="small">PII / PHI</text>
+  <path class="line" d="M735 228 L735 255"/>
+  <path class="line" d="M735 313 L735 338"/>
+  <path class="dash" d="M735 313 C735 430,735 475,735 515"/>
+  <text x="760" y="427" class="small">hash / token</text>
+  <path class="line" d="M500 259 C555 259,575 602,645 602"/>
+  <text x="546" y="587" class="small">Non-PII</text>
+  <path class="line" d="M735 559 L735 580"/>
+  <path class="line" d="M735 624 L735 645"/>
+  <path class="line" d="M825 667 C890 667,915 347,980 347"/>
+  <path class="line" d="M1070 369 L1070 390"/>
+  <path class="line" d="M1070 444 L1070 465"/>
+</svg>
+

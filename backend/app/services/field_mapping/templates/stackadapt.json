@@ -1,0 +1,90 @@
+{
+  "platform": "stackadapt",
+  "version": "1.0",
+  "raw_fields": [
+    { "name": "campaign_id", "type": "string", "sample": "sa-camp-1234" },
+    {
+      "name": "campaign_name",
+      "type": "string",
+      "sample": "Native Content Q1"
+    },
+    {
+      "name": "line_item_name",
+      "type": "string",
+      "sample": "Finance Audience"
+    },
+    {
+      "name": "creative_name",
+      "type": "string",
+      "sample": "Article Thumbnail A"
+    },
+    { "name": "impressions", "type": "integer", "sample": 35000 },
+    { "name": "clicks", "type": "integer", "sample": 700 },
+    { "name": "total_spend", "type": "float", "sample": 175.5 },
+    { "name": "conversions", "type": "integer", "sample": 22 },
+    { "name": "conv_revenue", "type": "float", "sample": 660.0 },
+    { "name": "ctr", "type": "float", "sample": 2.0 },
+    { "name": "ecpm", "type": "float", "sample": 5.01 },
+    { "name": "ecpc", "type": "float", "sample": 0.25 },
+    { "name": "date", "type": "date", "sample": "2026-03-18" },
+    { "name": "device_type", "type": "string", "sample": "Mobile" },
+    { "name": "geo_country", "type": "string", "sample": "US" }
+  ],
+  "default_mappings": [
+    {
+      "source_field": "campaign_id",
+      "target_field": "campaign_id",
+      "transform": null
+    },
+    {
+      "source_field": "campaign_name",
+      "target_field": "campaign_name",
+      "transform": null
+    },
+    {
+      "source_field": "line_item_name",
+      "target_field": "ad_group",
+      "transform": null
+    },
+    {
+      "source_field": "creative_name",
+      "target_field": "ad_name",
+      "transform": null
+    },
+    {
+      "source_field": "impressions",
+      "target_field": "impressions",
+      "transform": null
+    },
+    { "source_field": "clicks", "target_field": "clicks", "transform": null },
+    {
+      "source_field": "total_spend",
+      "target_field": "cost",
+      "transform": null
+    },
+    {
+      "source_field": "conversions",
+      "target_field": "conversions",
+      "transform": null
+    },
+    {
+      "source_field": "conv_revenue",
+      "target_field": "conversion_value",
+      "transform": null
+    },
+    { "source_field": "ctr", "target_field": "ctr", "transform": null },
+    { "source_field": "ecpm", "target_field": "cpm", "transform": null },
+    { "source_field": "ecpc", "target_field": "cpc", "transform": null },
+    { "source_field": "date", "target_field": "date", "transform": null },
+    {
+      "source_field": "device_type",
+      "target_field": "device",
+      "transform": null
+    },
+    {
+      "source_field": "geo_country",
+      "target_field": "location",
+      "transform": null
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+-- Snowflake schema bootstrap
+-- Create the schemas and warehouses ReceptivIQ needs in Snowflake
+-- Replace placeholders or execute via Snowflake CLI before running
+
+-- Create database (if not exists)
+CREATE DATABASE IF NOT EXISTS RECEPTIVIQ;
+USE DATABASE RECEPTIVIQ;
+
+-- Three-tier schema (raw → staging → mart)
+CREATE SCHEMA IF NOT EXISTS RAW      COMMENT = 'ETL raw landing layer (adapter writes directly here)';
+CREATE SCHEMA IF NOT EXISTS STAGING  COMMENT = 'dbt staging layer (stg_* model outputs)';
+CREATE SCHEMA IF NOT EXISTS MART     COMMENT = 'dbt business-aggregation layer (mart_* model outputs)';
+
+-- Separate warehouses by purpose (cost control + concurrency isolation)
+CREATE WAREHOUSE IF NOT EXISTS ETL_WH
+    WAREHOUSE_SIZE = 'XSMALL'
+    AUTO_SUSPEND = 300        -- 5 minutes idle, auto-suspend
+    AUTO_RESUME = TRUE
+    COMMENT = 'Dedicated ETL writes (triggered by Airflow/Celery)';
+
+CREATE WAREHOUSE IF NOT EXISTS ANALYTICS_WH
+    WAREHOUSE_SIZE = 'SMALL'
+    AUTO_SUSPEND = 300
+    AUTO_RESUME = TRUE
+    COMMENT = 'API queries + AI Agent analysis';
+
+-- Roles & privileges
+CREATE ROLE IF NOT EXISTS RECEPTIVIQ_ETL;
+CREATE ROLE IF NOT EXISTS RECEPTIVIQ_API;
+
+-- ETL role: write RAW, read STAGING/MART
+GRANT USAGE ON DATABASE RECEPTIVIQ TO ROLE RECEPTIVIQ_ETL;
+GRANT USAGE ON SCHEMA RECEPTIVIQ.RAW TO ROLE RECEPTIVIQ_ETL;
+GRANT CREATE TABLE ON SCHEMA RECEPTIVIQ.RAW TO ROLE RECEPTIVIQ_ETL;
+GRANT INSERT, SELECT ON ALL TABLES IN SCHEMA RECEPTIVIQ.RAW TO ROLE RECEPTIVIQ_ETL;
+GRANT USAGE ON WAREHOUSE ETL_WH TO ROLE RECEPTIVIQ_ETL;
+
+-- API role: read-only
+GRANT USAGE ON DATABASE RECEPTIVIQ TO ROLE RECEPTIVIQ_API;
+GRANT USAGE ON SCHEMA RECEPTIVIQ.MART TO ROLE RECEPTIVIQ_API;
+GRANT SELECT ON ALL TABLES IN SCHEMA RECEPTIVIQ.MART TO ROLE RECEPTIVIQ_API;
+GRANT USAGE ON WAREHOUSE ANALYTICS_WH TO ROLE RECEPTIVIQ_API;

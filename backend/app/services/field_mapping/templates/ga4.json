@@ -1,0 +1,371 @@
+{
+  "platform": "ga4",
+  "version": "2.0",
+  "description": "Google Analytics 4 Data API — real dimension and metric names from the GA4 Reporting API",
+  "raw_fields": [
+    {
+      "name": "date",
+      "type": "date",
+      "sample": "20260315",
+      "category": "dimension",
+      "description": "Date in YYYYMMDD format"
+    },
+    {
+      "name": "dateHour",
+      "type": "string",
+      "sample": "2026031514",
+      "category": "dimension",
+      "description": "Date + hour (YYYYMMDDHH)"
+    },
+    {
+      "name": "sessionCampaignId",
+      "type": "string",
+      "sample": "12345678",
+      "category": "dimension",
+      "description": "Campaign ID from UTM or Google Ads"
+    },
+    {
+      "name": "sessionCampaignName",
+      "type": "string",
+      "sample": "Brand Awareness Q1",
+      "category": "dimension",
+      "description": "Campaign name from UTM or Google Ads"
+    },
+    {
+      "name": "sessionGoogleAdsAdGroupName",
+      "type": "string",
+      "sample": "Display - Retarget",
+      "category": "dimension",
+      "description": "Google Ads ad group name"
+    },
+    {
+      "name": "sessionGoogleAdsAdNetworkType",
+      "type": "string",
+      "sample": "SEARCH",
+      "category": "dimension",
+      "description": "Google Ads network type (SEARCH, DISPLAY, etc.)"
+    },
+    {
+      "name": "sessionSourceMedium",
+      "type": "string",
+      "sample": "google / cpc",
+      "category": "dimension",
+      "description": "Session source / medium"
+    },
+    {
+      "name": "sessionSource",
+      "type": "string",
+      "sample": "google",
+      "category": "dimension",
+      "description": "Session traffic source"
+    },
+    {
+      "name": "sessionMedium",
+      "type": "string",
+      "sample": "cpc",
+      "category": "dimension",
+      "description": "Session traffic medium"
+    },
+    {
+      "name": "sessionDefaultChannelGroup",
+      "type": "string",
+      "sample": "Paid Search",
+      "category": "dimension",
+      "description": "Default channel grouping"
+    },
+    {
+      "name": "country",
+      "type": "string",
+      "sample": "United States",
+      "category": "dimension",
+      "description": "Country of the user"
+    },
+    {
+      "name": "city",
+      "type": "string",
+      "sample": "New York",
+      "category": "dimension",
+      "description": "City of the user"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "sample": "California",
+      "category": "dimension",
+      "description": "Region / state of the user"
+    },
+    {
+      "name": "deviceCategory",
+      "type": "string",
+      "sample": "desktop",
+      "category": "dimension",
+      "description": "Device type (desktop, mobile, tablet)"
+    },
+    {
+      "name": "operatingSystem",
+      "type": "string",
+      "sample": "Macintosh",
+      "category": "dimension",
+      "description": "Operating system"
+    },
+    {
+      "name": "browser",
+      "type": "string",
+      "sample": "Chrome",
+      "category": "dimension",
+      "description": "Browser name"
+    },
+    {
+      "name": "userAgeBracket",
+      "type": "string",
+      "sample": "25-34",
+      "category": "dimension",
+      "description": "User age range"
+    },
+    {
+      "name": "userGender",
+      "type": "string",
+      "sample": "male",
+      "category": "dimension",
+      "description": "User gender"
+    },
+    {
+      "name": "landingPage",
+      "type": "string",
+      "sample": "/products/shoes",
+      "category": "dimension",
+      "description": "Landing page path"
+    },
+    {
+      "name": "pagePath",
+      "type": "string",
+      "sample": "/checkout",
+      "category": "dimension",
+      "description": "Page path"
+    },
+    {
+      "name": "eventName",
+      "type": "string",
+      "sample": "purchase",
+      "category": "dimension",
+      "description": "Event name (page_view, purchase, etc.)"
+    },
+    {
+      "name": "sessions",
+      "type": "integer",
+      "sample": 1240,
+      "category": "metric",
+      "description": "Number of sessions"
+    },
+    {
+      "name": "totalUsers",
+      "type": "integer",
+      "sample": 980,
+      "category": "metric",
+      "description": "Total unique users"
+    },
+    {
+      "name": "newUsers",
+      "type": "integer",
+      "sample": 520,
+      "category": "metric",
+      "description": "Number of new users"
+    },
+    {
+      "name": "activeUsers",
+      "type": "integer",
+      "sample": 870,
+      "category": "metric",
+      "description": "Number of active users"
+    },
+    {
+      "name": "screenPageViews",
+      "type": "integer",
+      "sample": 3500,
+      "category": "metric",
+      "description": "Total page/screen views"
+    },
+    {
+      "name": "engagedSessions",
+      "type": "integer",
+      "sample": 680,
+      "category": "metric",
+      "description": "Sessions with engagement (>10s or conversion or 2+ page views)"
+    },
+    {
+      "name": "engagementRate",
+      "type": "float",
+      "sample": 0.548,
+      "category": "metric",
+      "description": "Engaged sessions / total sessions"
+    },
+    {
+      "name": "averageSessionDuration",
+      "type": "float",
+      "sample": 125.3,
+      "category": "metric",
+      "description": "Average session duration in seconds"
+    },
+    {
+      "name": "bounceRate",
+      "type": "float",
+      "sample": 0.452,
+      "category": "metric",
+      "description": "Percentage of non-engaged sessions"
+    },
+    {
+      "name": "conversions",
+      "type": "integer",
+      "sample": 42,
+      "category": "metric",
+      "description": "Number of conversion events"
+    },
+    {
+      "name": "totalRevenue",
+      "type": "float",
+      "sample": 1250.0,
+      "category": "metric",
+      "description": "Total revenue (purchase + ad + subscription)"
+    },
+    {
+      "name": "purchaseRevenue",
+      "type": "float",
+      "sample": 1100.0,
+      "category": "metric",
+      "description": "Revenue from e-commerce purchases"
+    },
+    {
+      "name": "ecommercePurchases",
+      "type": "integer",
+      "sample": 35,
+      "category": "metric",
+      "description": "Number of e-commerce purchase events"
+    },
+    {
+      "name": "advertiserAdCost",
+      "type": "float",
+      "sample": 350.75,
+      "category": "metric",
+      "description": "Google Ads cost (requires linked Google Ads)"
+    },
+    {
+      "name": "advertiserAdClicks",
+      "type": "integer",
+      "sample": 890,
+      "category": "metric",
+      "description": "Google Ads clicks"
+    },
+    {
+      "name": "advertiserAdImpressions",
+      "type": "integer",
+      "sample": 28500,
+      "category": "metric",
+      "description": "Google Ads impressions"
+    },
+    {
+      "name": "advertiserAdCostPerClick",
+      "type": "float",
+      "sample": 0.394,
+      "category": "metric",
+      "description": "Google Ads cost per click"
+    },
+    {
+      "name": "returnOnAdSpend",
+      "type": "float",
+      "sample": 3.56,
+      "category": "metric",
+      "description": "Revenue / ad cost"
+    }
+  ],
+  "default_mappings": [
+    {
+      "source_field": "sessionCampaignId",
+      "target_field": "campaign_id",
+      "transform": null
+    },
+    {
+      "source_field": "sessionCampaignName",
+      "target_field": "campaign_name",
+      "transform": null
+    },
+    {
+      "source_field": "sessionGoogleAdsAdGroupName",
+      "target_field": "ad_group",
+      "transform": null
+    },
+    {
+      "source_field": "advertiserAdImpressions",
+      "target_field": "impressions",
+      "transform": null
+    },
+    {
+      "source_field": "advertiserAdClicks",
+      "target_field": "clicks",
+      "transform": null
+    },
+    {
+      "source_field": "advertiserAdCost",
+      "target_field": "cost",
+      "transform": null
+    },
+    {
+      "source_field": "conversions",
+      "target_field": "conversions",
+      "transform": null
+    },
+    {
+      "source_field": "totalRevenue",
+      "target_field": "conversion_value",
+      "transform": null
+    },
+    {
+      "source_field": "returnOnAdSpend",
+      "target_field": "roas",
+      "transform": null
+    },
+    {
+      "source_field": "advertiserAdCostPerClick",
+      "target_field": "cpc",
+      "transform": null
+    },
+    {
+      "source_field": null,
+      "target_field": "ctr",
+      "transform": {
+        "type": "formula",
+        "expression": "{advertiserAdClicks} / {advertiserAdImpressions} * 100",
+        "input_fields": ["advertiserAdClicks", "advertiserAdImpressions"]
+      }
+    },
+    {
+      "source_field": null,
+      "target_field": "cpm",
+      "transform": {
+        "type": "formula",
+        "expression": "{advertiserAdCost} / {advertiserAdImpressions} * 1000",
+        "input_fields": ["advertiserAdCost", "advertiserAdImpressions"]
+      }
+    },
+    { "source_field": "date", "target_field": "date", "transform": null },
+    {
+      "source_field": "userAgeBracket",
+      "target_field": "age",
+      "transform": null
+    },
+    {
+      "source_field": "userGender",
+      "target_field": "gender",
+      "transform": null
+    },
+    {
+      "source_field": "country",
+      "target_field": "location",
+      "transform": null
+    },
+    {
+      "source_field": "deviceCategory",
+      "target_field": "device",
+      "transform": null
+    }
+  ]
+}

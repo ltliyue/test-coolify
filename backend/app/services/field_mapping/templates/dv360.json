@@ -1,0 +1,74 @@
+{
+  "platform": "dv360",
+  "version": "1.0",
+  "raw_fields": [
+    { "name": "campaign_id", "type": "string", "sample": "98765432" },
+    {
+      "name": "campaign",
+      "type": "string",
+      "sample": "Programmatic Display Q1"
+    },
+    { "name": "insertion_order", "type": "string", "sample": "IO-2026-001" },
+    { "name": "line_item", "type": "string", "sample": "Retargeting - US" },
+    { "name": "creative", "type": "string", "sample": "HTML5 Banner 728x90" },
+    { "name": "impressions", "type": "integer", "sample": 120000 },
+    { "name": "clicks", "type": "integer", "sample": 960 },
+    { "name": "revenue_advertiser", "type": "float", "sample": 480.0 },
+    { "name": "total_conversions", "type": "integer", "sample": 28 },
+    { "name": "post_click_conversions", "type": "integer", "sample": 15 },
+    { "name": "total_media_cost_advertiser", "type": "float", "sample": 420.0 },
+    { "name": "date", "type": "date", "sample": "2026-03-15" },
+    { "name": "device_type", "type": "string", "sample": "Computer" },
+    { "name": "country", "type": "string", "sample": "United States" }
+  ],
+  "default_mappings": [
+    {
+      "source_field": "campaign_id",
+      "target_field": "campaign_id",
+      "transform": null
+    },
+    {
+      "source_field": "campaign",
+      "target_field": "campaign_name",
+      "transform": null
+    },
+    {
+      "source_field": "line_item",
+      "target_field": "ad_group",
+      "transform": null
+    },
+    {
+      "source_field": "creative",
+      "target_field": "ad_name",
+      "transform": null
+    },
+    {
+      "source_field": "impressions",
+      "target_field": "impressions",
+      "transform": null
+    },
+    { "source_field": "clicks", "target_field": "clicks", "transform": null },
+    {
+      "source_field": "total_media_cost_advertiser",
+      "target_field": "cost",
+      "transform": null
+    },
+    {
+      "source_field": "total_conversions",
+      "target_field": "conversions",
+      "transform": null
+    },
+    {
+      "source_field": "revenue_advertiser",
+      "target_field": "conversion_value",
+      "transform": null
+    },
+    { "source_field": "date", "target_field": "date", "transform": null },
+    {
+      "source_field": "device_type",
+      "target_field": "device",
+      "transform": null
+    },
+    { "source_field": "country", "target_field": "location", "transform": null }
+  ]
+}

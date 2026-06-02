@@ -1,0 +1,76 @@
+{
+  "platform": "hubspot",
+  "version": "1.0",
+  "raw_fields": [
+    { "name": "hs_campaign_id", "type": "string", "sample": "camp_abc123" },
+    {
+      "name": "hs_campaign_name",
+      "type": "string",
+      "sample": "Email Nurture Series"
+    },
+    { "name": "hs_ad_group_name", "type": "string", "sample": "Segment A" },
+    { "name": "hs_ad_name", "type": "string", "sample": "Welcome Email" },
+    { "name": "hs_impressions", "type": "integer", "sample": 8500 },
+    { "name": "hs_clicks", "type": "integer", "sample": 620 },
+    { "name": "hs_spend", "type": "float", "sample": 200.0 },
+    { "name": "hs_conversions", "type": "integer", "sample": 35 },
+    { "name": "hs_revenue", "type": "float", "sample": 875.5 },
+    { "name": "hs_date", "type": "date", "sample": "2026-03-10" },
+    { "name": "hs_country", "type": "string", "sample": "Canada" },
+    { "name": "hs_device_type", "type": "string", "sample": "mobile" }
+  ],
+  "default_mappings": [
+    {
+      "source_field": "hs_campaign_id",
+      "target_field": "campaign_id",
+      "transform": null
+    },
+    {
+      "source_field": "hs_campaign_name",
+      "target_field": "campaign_name",
+      "transform": null
+    },
+    {
+      "source_field": "hs_ad_group_name",
+      "target_field": "ad_group",
+      "transform": null
+    },
+    {
+      "source_field": "hs_ad_name",
+      "target_field": "ad_name",
+      "transform": null
+    },
+    {
+      "source_field": "hs_impressions",
+      "target_field": "impressions",
+      "transform": null
+    },
+    {
+      "source_field": "hs_clicks",
+      "target_field": "clicks",
+      "transform": null
+    },
+    { "source_field": "hs_spend", "target_field": "cost", "transform": null },
+    {
+      "source_field": "hs_conversions",
+      "target_field": "conversions",
+      "transform": null
+    },
+    {
+      "source_field": "hs_revenue",
+      "target_field": "conversion_value",
+      "transform": null
+    },
+    { "source_field": "hs_date", "target_field": "date", "transform": null },
+    {
+      "source_field": "hs_country",
+      "target_field": "location",
+      "transform": null
+    },
+    {
+      "source_field": "hs_device_type",
+      "target_field": "device",
+      "transform": null
+    }
+  ]
+}

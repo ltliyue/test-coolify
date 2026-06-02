@@ -1,0 +1,44 @@
+flowchart TB
+    subgraph SOURCE["Source Inputs"]
+        CRM["CRM Export / Customer List"]
+        ADS["Ad Platform Reporting"]
+        GA["GA4 Events"]
+        DATA["Audience Data Providers"]
+    end
+
+    subgraph CLASSIFY["Classification Gate"]
+        SCAN["PII / PHI Scan"]
+        POLICY["Tenant Data Policy"]
+    end
+
+    subgraph PII["Raw PII-Segregated Lake"]
+        ENC["Encrypted Object Storage"]
+        MAP["Identity Mapping Table"]
+        DSR["DSAR / Deletion Workflow"]
+    end
+
+    subgraph PROC["Processed Lake in Snowflake"]
+        HASH["Hashed Identifiers"]
+        AGG["Aggregated Metrics"]
+        CANON["Canonical Marketing Schema"]
+        RLS2["Row Access Policy"]
+    end
+
+    subgraph AI2["AI Consumption Boundary"]
+        SAFECTX["Safe Context Builder"]
+        PROMPT["Prompt Payload: No Raw PII"]
+        LOG["Prompt and Access Audit"]
+    end
+
+    CRM --> SCAN
+    ADS --> SCAN
+    GA --> SCAN
+    DATA --> SCAN
+    POLICY --> SCAN
+    SCAN -->|PII / PHI| ENC
+    ENC --> MAP --> DSR
+    MAP --> HASH
+    SCAN -->|Non-PII| CANON
+    HASH --> CANON --> AGG --> RLS2
+    RLS2 --> SAFECTX --> PROMPT --> LOG
+

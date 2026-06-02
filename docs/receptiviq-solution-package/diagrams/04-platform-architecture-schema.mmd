@@ -1,0 +1,17 @@
+flowchart TB
+    L1["1. Data Sources Layer<br/>Experian, TransUnion, Nielsen, Placer IQ, Quorum,<br/>DV360, Meta, TikTok, The Trade Desk, GA4, Tresorit"]
+    L2["2. Ingestion and Credential Layer<br/>OAuth, API keys, service accounts, encrypted file intake,<br/>tenant-scoped credential vault"]
+    L3["3. Compliance and Classification Layer<br/>PII/PHI scan, data classification, residency policy,<br/>retention policy, audit"]
+    L4A["4A. Raw PII-Segregated Lake<br/>encrypted raw sensitive data,<br/>tenant-level keys, restricted access"]
+    L4B["4B. ELT Pipeline<br/>extract, classify, load, transform:<br/>normalize, deduplicate, validate, enrich, index"]
+    L5["5. Snowflake Warehouse<br/>processed lake, canonical schema,<br/>row-level security, zero-copy cloning,<br/>semantic layer, AI retrieval index"]
+    L6["6. Core AI Brain<br/>LLM router, context builder,<br/>agent orchestration, token budget,<br/>prompt and access audit"]
+    L7["7. Agent Layer<br/>Persona Agent, Creative Agent,<br/>Attribution Agent, Media Agent"]
+    L8["8. Functional Pillars<br/>Market Research, Creative Engine,<br/>Media Buying, Attribution, Client Portal"]
+    L9["9. Application Layer<br/>Agency Portal, Client Portal,<br/>admin console, reporting exports"]
+
+    L1 --> L2 --> L3
+    L3 -->|PII / PHI| L4A
+    L3 -->|Non-PII| L4B
+    L4A -->|hashed / tokenized joins| L4B
+    L4B --> L5 --> L6 --> L7 --> L8 --> L9

@@ -2,14 +2,18 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# 系统依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# 系统依赖（apt 换阿里云源，兼容 bookworm deb822 与旧版格式）
+RUN (sed -i 's@deb.debian.org@mirrors.aliyun.com@g; s@security.debian.org@mirrors.aliyun.com@g' /etc/apt/sources.list.d/debian.sources 2>/dev/null \
+     || sed -i 's@deb.debian.org@mirrors.aliyun.com@g; s@security.debian.org@mirrors.aliyun.com@g' /etc/apt/sources.list 2>/dev/null \
+     || true) && \
+    apt-get update && apt-get install -y --no-install-recommends \
     gcc libpq-dev curl && \
     rm -rf /var/lib/apt/lists/*
 
-# Python 依赖
+# Python 依赖（pip 换清华源）
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -i https://pypi.tuna.tsinghua.edu.cn/simple \
+    --trusted-host pypi.tuna.tsinghua.edu.cn -r requirements.txt
 
 # 应用代码
 COPY . .

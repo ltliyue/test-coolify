@@ -1,5 +1,8 @@
 x-backend-image: &backend-image
-  image: ghcr.io/${GHCR_OWNER}/receptiviq-backend:${IMAGE_TAG:-latest}
+  build:
+    context: ./backend
+    dockerfile: Dockerfile
+  image: receptiviq-backend:${IMAGE_TAG:-latest}
 
 x-backend-env: &backend-env
   DATABASE_URL: ${DATABASE_URL}
@@ -50,7 +53,10 @@ services:
         condition: service_started
 
   frontend:
-    image: ghcr.io/${GHCR_OWNER}/receptiviq-frontend:${IMAGE_TAG:-latest}
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: receptiviq-frontend:${IMAGE_TAG:-latest}
     restart: unless-stopped
     ports:
       - "${FRONTEND_PORT:-8080}:80"
